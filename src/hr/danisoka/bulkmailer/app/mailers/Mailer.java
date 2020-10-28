@@ -39,8 +39,8 @@ public abstract class Mailer {
     }
     
     public Mailer(String username, String password, MailerListener listener) {        
-        initialize(username, password);
         this.listener = listener;
+        initialize(username, password);
     }
     
     public void setListener(MailerListener listener) {
@@ -56,15 +56,7 @@ public abstract class Mailer {
         if(!this.loginWithFullEmail) {
             this.username += this.emailDomain;
         }
-        createSession();
-        try {
-            throw new Exception("Test 1");
-        } catch (Exception ex) {
-            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-            if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
-            }
-        }
+        createSession();       
     }
     
     private void createSession() {

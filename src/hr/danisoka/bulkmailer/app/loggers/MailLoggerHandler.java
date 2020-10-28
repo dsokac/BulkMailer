@@ -35,11 +35,7 @@ public final class MailLoggerHandler{
             }
             rootLogger.setLevel(defaultLevel);
             rootLogger.addHandler(logHandler);
-        }
-        catch (SecurityException e) {
-            e.printStackTrace(); 
-            listener.onErrorOccurred(e, e.getMessage());
-        } catch (IOException ex) {
+        } catch (IOException | SecurityException ex) {
             Logger.getLogger(MailLoggerHandler.class.getName()).log(Level.SEVERE, null, ex);
             listener.onErrorOccurred(ex, ex.getMessage());
         }
