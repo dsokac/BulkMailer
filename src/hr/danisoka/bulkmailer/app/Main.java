@@ -81,7 +81,6 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println(AppConstants.AppSettings.TEMPLATES_FOLDER);
         db.closeConnection();
     }
     

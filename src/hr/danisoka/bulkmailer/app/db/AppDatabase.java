@@ -38,16 +38,15 @@ public class AppDatabase {
     private AppDatabase() {
         JdbcPooledConnectionSource connectionSource  = null;
         try {
-            File dbDir = new File(AppConstants.AppSettings.DB_FOLDER);
+            File dbDir = new File(AppConstants.AppSettings.Folders.DB_FOLDER);
             dbDir.mkdirs();
             
-            File dbFile = new File(AppConstants.AppSettings.DB_FILE);
+            File dbFile = new File(AppConstants.AppSettings.Files.DB_FILE);
             if(!dbFile.exists()) {
                 dbFile.createNewFile();
             }
-            System.out.println(AppConstants.AppSettings.DB_FOLDER);
-            System.out.println(AppConstants.AppSettings.DB_FILE);
-            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + AppConstants.AppSettings.DB_FILE);
+            
+            connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + AppConstants.AppSettings.Files.DB_FILE);
             connectionSource.setMaxConnectionAgeMillis(5 * 60 * 1000); //5 minutes
             connectionSource.setCheckConnectionsEveryMillis(60 * 1000);
             connectionSource.setTestBeforeGet(true);
