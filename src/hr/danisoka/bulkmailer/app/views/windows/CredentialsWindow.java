@@ -25,9 +25,7 @@ public class CredentialsWindow extends javax.swing.JFrame implements Credentials
         initComponents();
         lblErrorMessage.setVisible(false);
         setupButtons();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);        
     }
 
     /**
@@ -164,6 +162,7 @@ public class CredentialsWindow extends javax.swing.JFrame implements Credentials
         getContentPane().add(lblErrorMessage, gridBagConstraints);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     
