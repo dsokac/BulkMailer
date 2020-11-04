@@ -283,6 +283,9 @@ public class CredentialsWindow extends javax.swing.JFrame implements Credentials
 
     @Override
     public void showFormErrorMessage(String message) {
+        txtUsername.setText(null);
+        txtPassword.setText(null);
+        
         lblErrorMessage.setText(message);
         lblErrorMessage.setVisible(true);
         manageSignInButton(false);
