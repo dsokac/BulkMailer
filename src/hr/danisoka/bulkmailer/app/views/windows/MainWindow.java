@@ -5,6 +5,12 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows;
 
+import hr.danisoka.bulkmailer.app.BulkMailerApplication;
+import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+
 /**
  *
  * @author Danijel
@@ -72,11 +78,35 @@ public class MainWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainWindow().setVisible(true);
+                MainWindow main = new MainWindow();
+                main.handleCredentials();
+                main.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    public void handleCredentials() {
+        BulkMailerApplication app = BulkMailerApplication.getInstance();
+         if(!app.areCredentialsPresent()) {
+            CredentialsWindow credWin = new CredentialsWindow();
+            CredentialsController controller = new CredentialsController(credWin);
+            credWin.setController(controller);
+            credWin.setVisible(true);
+            
+            MainWindow obj = this;            
+            credWin.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    BulkMailerApplication app = BulkMailerApplication.getInstance();
+                    if(!app.areCredentialsPresent()) {
+                        obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));
+                    }
+                }                
+            });
+        }
+    }
+
 }

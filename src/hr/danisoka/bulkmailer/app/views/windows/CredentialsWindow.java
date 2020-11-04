@@ -5,17 +5,25 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows;
 
-/**
- *
- * @author Danijel
- */
-public class CredentialsWindow extends javax.swing.JFrame {
+import hr.danisoka.bulkmailer.app.contracts.CredentialsWinContract;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class CredentialsWindow extends javax.swing.JFrame implements CredentialsWinContract.View{
 
     /**
      * Creates new form CredentialsWindow
      */
     public CredentialsWindow() {
         initComponents();
+        lblErrorMessage.setVisible(false);
+        setupButtons();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     /**
@@ -35,136 +43,263 @@ public class CredentialsWindow extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        lblDescription = new javax.swing.JLabel();
+        label1 = new java.awt.Label();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        lblErrorMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Korisnički podaci za e-mail");
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMinimumSize(new java.awt.Dimension(234, 191));
         setName("winCredentials"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(449, 250));
         setType(java.awt.Window.Type.POPUP);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 9, 0};
-        layout.rowHeights = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0};
+        layout.rowHeights = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
         getContentPane().setLayout(layout);
 
         lblUsername.setText("Korisničko ime:");
         lblUsername.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.ipady = 4;
         getContentPane().add(lblUsername, gridBagConstraints);
 
-        txtUsername.setText("jTextField1");
         txtUsername.setPreferredSize(new java.awt.Dimension(200, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(txtUsername, gridBagConstraints);
 
         lblPassword.setText("Lozinka:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.ipady = 4;
         getContentPane().add(lblPassword, gridBagConstraints);
 
         btnSignIn.setBackground(new java.awt.Color(0, 204, 0));
+        btnSignIn.setForeground(new java.awt.Color(255, 255, 255));
         btnSignIn.setText("Prijavi se");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
         getContentPane().add(btnSignIn, gridBagConstraints);
 
         btnCancel.setBackground(new java.awt.Color(255, 0, 0));
+        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
         btnCancel.setText("Odustani");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(btnCancel, gridBagConstraints);
 
-        txtPassword.setText("jPasswordField1");
-        txtPassword.setPreferredSize(new java.awt.Dimension(200, 20));
+        txtPassword.setAlignmentX(0.0F);
+        txtPassword.setPreferredSize(new java.awt.Dimension(200, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(txtPassword, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator2, gridBagConstraints);
 
-        lblDescription.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        lblDescription.setText("jLabel1");
+        label1.setPreferredSize(new java.awt.Dimension(956, 40));
+        label1.setText("Unesite korisničko ime i lozinku koje koristite za prijavu na e-mail putem kojeg želite poslati podatke.\n\nZa slučaj sa FOI e-mailom, nije potrebno unositi domenu (@foi.unizg.hr).");
+        label1.setVisible(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        getContentPane().add(lblDescription, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(label1, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel1.setText("<html>Unesite korisničko ime i lozinku koje koristite za prijavu na e-mail putem<br/>\nkojeg želite poslati podatke.<br/><br/>Za slučaj sa FOI e-mailom, nije potrebno unositi <b>domenu (@foi.unizg.hr)</b>.</html>");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(jSeparator3, gridBagConstraints);
+
+        lblErrorMessage.setForeground(new java.awt.Color(255, 0, 0));
+        lblErrorMessage.setText("jLabel2");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblErrorMessage, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CredentialsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CredentialsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CredentialsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CredentialsWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CredentialsWindow().setVisible(true);
-            }
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSignIn;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblDescription;
+    private javax.swing.JSeparator jSeparator3;
+    private java.awt.Label label1;
+    private javax.swing.JLabel lblErrorMessage;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
+
+    private CredentialsWinContract.Controller controller;
+    private Color initialBackground;
+    private Color initialForeground;
+    
+    public void setupButtons() {
+        CredentialsWindow obj = this;
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                obj.setVisible(false);
+            }
+        });
+        
+        initialBackground = btnSignIn.getBackground();
+        initialForeground = btnSignIn.getForeground();
+        
+        btnSignIn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = txtUsername.getText();
+                String password = new String(txtPassword.getPassword());
+                obj.controller.storeCredentials(username, password);                
+            }
+        });
+        
+        txtUsername.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                manageSignInAccess();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                manageSignInAccess();
+            }
+        });
+        
+        txtPassword.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                manageSignInAccess();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                manageSignInAccess();
+            }
+        });
+        
+        txtPassword.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                manageSignInAccess();
+            }
+        });
+        
+        txtUsername.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                manageSignInAccess();
+            }
+        });
+    }
+    
+    public void setController(CredentialsWinContract.Controller controller) {
+        this.controller = controller;
+    }
+    
+    private void manageSignInAccess() {
+        if(!txtUsername.getText().isEmpty() && !new String(txtPassword.getPassword()).isEmpty()) {
+            lblErrorMessage.setText(null);
+            lblErrorMessage.setVisible(false);
+            manageSignInButton(true);
+        } else {
+            if(lblErrorMessage.isVisible()) {
+                manageSignInButton(false);
+            }
+        }
+    }
+
+    @Override
+    public void showFormErrorMessage(String message) {
+        lblErrorMessage.setText(message);
+        lblErrorMessage.setVisible(true);
+        manageSignInButton(false);
+    }
+
+    @Override
+    public void credentialsStored() {
+        this.setVisible(false);
+    }
+    
+    
+    
+    private void manageSignInButton(boolean enabled) {
+        if(enabled) {
+            btnSignIn.setBackground(initialBackground);
+            btnSignIn.setForeground(initialForeground);
+        } else {
+            btnSignIn.setBackground(new Color(240, 240, 240));
+            btnSignIn.setForeground(new Color(0, 0, 0));
+        }
+        btnSignIn.setEnabled(enabled);
+    }
 }
