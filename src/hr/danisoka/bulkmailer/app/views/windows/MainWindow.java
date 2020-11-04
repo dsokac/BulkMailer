@@ -142,6 +142,7 @@ public class MainWindow extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void handleCredentials() {
+        this.setEnabled(false);
         BulkMailerApplication app = BulkMailerApplication.getInstance();
         CredentialsWindow credWin = new CredentialsWindow();
         CredentialsController controller = new CredentialsController(credWin);
@@ -156,6 +157,7 @@ public class MainWindow extends javax.swing.JFrame {
                 if(!app.areCredentialsPresent()) {
                     obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));
                 }
+                obj.setEnabled(true);
             }                
         });
     }
