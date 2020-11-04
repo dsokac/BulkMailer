@@ -7,6 +7,8 @@ package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
@@ -23,6 +25,13 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
+        MainWindow obj = this;
+        jmiFileChangeCreds.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                obj.handleCredentials();
+            }
+        });
     }
 
     /**
@@ -33,7 +42,40 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jmbMainBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jmFileNew = new javax.swing.JMenu();
+        jmiNewSession = new javax.swing.JMenuItem();
+        jmiFileChangeCreds = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenu1.setText("File");
+
+        jmFileNew.setText("Novo");
+        jmFileNew.setToolTipText("");
+
+        jmiNewSession.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jmiNewSession.setText("Sesija skupnog emaila");
+        jmiNewSession.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiNewSessionActionPerformed(evt);
+            }
+        });
+        jmFileNew.add(jmiNewSession);
+
+        jMenu1.add(jmFileNew);
+
+        jmiFileChangeCreds.setText("Ažuriraj pristupne podatke");
+        jMenu1.add(jmiFileChangeCreds);
+
+        jmbMainBar.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jmbMainBar.add(jMenu2);
+
+        setJMenuBar(jmbMainBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -43,11 +85,15 @@ public class MainWindow extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 279, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jmiNewSessionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNewSessionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jmiNewSessionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,27 +133,31 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jmFileNew;
+    private javax.swing.JMenuBar jmbMainBar;
+    private javax.swing.JMenuItem jmiFileChangeCreds;
+    private javax.swing.JMenuItem jmiNewSession;
     // End of variables declaration//GEN-END:variables
 
     public void handleCredentials() {
         BulkMailerApplication app = BulkMailerApplication.getInstance();
-         if(!app.areCredentialsPresent()) {
-            CredentialsWindow credWin = new CredentialsWindow();
-            CredentialsController controller = new CredentialsController(credWin);
-            credWin.setController(controller);
-            credWin.setVisible(true);
-            
-            MainWindow obj = this;            
-            credWin.addComponentListener(new ComponentAdapter() {
-                @Override
-                public void componentHidden(ComponentEvent e) {
-                    BulkMailerApplication app = BulkMailerApplication.getInstance();
-                    if(!app.areCredentialsPresent()) {
-                        obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));
-                    }
-                }                
-            });
-        }
+        CredentialsWindow credWin = new CredentialsWindow();
+        CredentialsController controller = new CredentialsController(credWin);
+        credWin.setController(controller);
+        credWin.setVisible(true);
+
+        MainWindow obj = this;            
+        credWin.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                BulkMailerApplication app = BulkMailerApplication.getInstance();
+                if(!app.areCredentialsPresent()) {
+                    obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));
+                }
+            }                
+        });
     }
 
 }
