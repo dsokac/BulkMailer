@@ -1,5 +1,6 @@
 package hr.danisoka.bulkmailer.app;
 
+import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.db.AppDatabase;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.AttemptDaoImpl;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.HolderMappingDaoImpl;
@@ -10,6 +11,11 @@ import hr.danisoka.bulkmailer.app.mailers.Mailer;
 import hr.danisoka.bulkmailer.app.models.Attempt;
 import hr.danisoka.bulkmailer.app.models.HolderMapping;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.views.windows.CredentialsWindow;
+import hr.danisoka.bulkmailer.app.views.windows.MainWindow;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +40,7 @@ public class Main {
         });
         AppDatabase db = AppDatabase.getInstance();
         
-        SessionDaoImpl impl = db.sessionDaoImpl;
+        /*SessionDaoImpl impl = db.sessionDaoImpl;
         HolderMappingDaoImpl hmImpl = db.holderMappingDaoImpl;
         AttemptDaoImpl aImpl = db.attemptDaoImpl;
         
@@ -79,7 +85,10 @@ public class Main {
         } catch (SQLException ex) {
             ex.printStackTrace();
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        
+        MainWindow main = new MainWindow();       
+       
         
         db.closeConnection();
     }
