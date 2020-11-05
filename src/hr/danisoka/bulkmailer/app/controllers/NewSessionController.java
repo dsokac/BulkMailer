@@ -1,9 +1,11 @@
 package hr.danisoka.bulkmailer.app.controllers;
 
 import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
+import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.utils.CsvUtils;
 import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.regex.Pattern;
 public class NewSessionController implements NewSessionWinContract.Controller {
 
     private NewSessionWinContract.View view;
+    private MailLoggerHandler.LoggerErrorListener errorListener;
     
-    public NewSessionController(NewSessionWinContract.View view) {
+    public NewSessionController(NewSessionWinContract.View view, MailLoggerHandler.LoggerErrorListener errorListener) {
         this.view = view;
+        this.errorListener = errorListener;
     }
     
     @Override
@@ -35,9 +39,17 @@ public class NewSessionController implements NewSessionWinContract.Controller {
         List<String> data = null;
         try {
             data = CsvUtils.getHeaderFromFile(file, ";");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, String.format("Ne mogu pronaći datoteku: '%s'", file.getAbsolutePath()));
+            }
         } catch (IOException ex) {
             Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, String.format("Ne mogu pročitati datoteku: '%s'", file.getAbsolutePath()));
+            }
+        } 
         return data;
     }
 
@@ -49,8 +61,16 @@ public class NewSessionController implements NewSessionWinContract.Controller {
             
             handleEmailColumn(headers);
             handleGroupColumn(data, headers);
-        } catch (IOException ex) {
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, String.format("Ne mogu pronaći datoteku: '%s'", file.getAbsolutePath()));
+            }
+        }catch (IOException ex) {
+            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, String.format("Ne mogu pročitati datoteku: '%s'", file.getAbsolutePath()));
+            }
         }
     }
     

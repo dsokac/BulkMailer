@@ -8,17 +8,20 @@ package hr.danisoka.bulkmailer.app.views.windows;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.controllers.NewSessionController;
+import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Danijel
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener{
 
     /**
      * Creates new form MainWindow
@@ -172,12 +175,14 @@ public class MainWindow extends javax.swing.JFrame {
     private void handleSessionCreation() {
         this.setEnabled(false);
         NewSessionWindow newSession = new NewSessionWindow();
-        NewSessionController controller = new NewSessionController(newSession);
+        NewSessionController controller = new NewSessionController(newSession, this);
         newSession.setController(controller);
         newSession.setVisible(true);
         this.setEnabled(true);
     }
-    
-    
 
+    @Override
+    public void onErrorOccurred(Exception ex, String message) {
+        JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
+    }
 }
