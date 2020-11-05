@@ -29,7 +29,6 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     public MainWindow() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-        MainWindow obj = this;
         jmiFileChangeCreds.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,6 +150,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     private javax.swing.JMenuItem jmiNewSession;
     // End of variables declaration//GEN-END:variables
 
+    private MainWindow obj = this;       
+    
     public void handleCredentials() {
         this.setEnabled(false);
         BulkMailerApplication app = BulkMailerApplication.getInstance();
@@ -159,7 +160,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         credWin.setController(controller);
         credWin.setVisible(true);
 
-        MainWindow obj = this;            
+            
         credWin.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
@@ -178,7 +179,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         NewSessionController controller = new NewSessionController(newSession, this);
         newSession.setController(controller);
         newSession.setVisible(true);
-        this.setEnabled(true);
+        newSession.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                obj.setEnabled(true);
+            }                
+        });
     }
 
     @Override
