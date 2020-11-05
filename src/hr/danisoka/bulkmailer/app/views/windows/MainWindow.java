@@ -7,6 +7,7 @@ package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
+import hr.danisoka.bulkmailer.app.controllers.NewSessionController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -30,6 +31,12 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 obj.handleCredentials();
+            }
+        });
+        jmiNewSession.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                obj.handleSessionCreation();
             }
         });
     }
@@ -161,5 +168,16 @@ public class MainWindow extends javax.swing.JFrame {
             }                
         });
     }
+    
+    private void handleSessionCreation() {
+        this.setEnabled(false);
+        NewSessionWindow newSession = new NewSessionWindow();
+        NewSessionController controller = new NewSessionController(newSession);
+        newSession.setController(controller);
+        newSession.setVisible(true);
+        this.setEnabled(true);
+    }
+    
+    
 
 }
