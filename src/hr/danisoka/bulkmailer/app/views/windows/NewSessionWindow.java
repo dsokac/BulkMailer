@@ -279,6 +279,7 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     // End of variables declaration//GEN-END:variables
 
     private File csvFile;
+    private File templateFile;
     private NewSessionWinContract.Controller controller;
     private List<String> studentsDataHeaders;
     
@@ -310,6 +311,9 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     private void handleToggleButton(boolean value) {
         jtbtnGroupIndicator.setSelected(value);
         jtbtnGroupIndicator.setText(value ? "DA" :  "NE");
+        if(!value && jcbxGroupColumn.getSelectedIndex() != 0) {
+            jcbxGroupColumn.setSelectedIndex(0);
+        }
     }
     
     private void setupButtons() {
@@ -378,10 +382,13 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         chooser.setLocale(Locale.forLanguageTag("HR"));
         int outcome = chooser.showDialog(this, null);
         if(outcome == JFileChooser.APPROVE_OPTION) {
-            csvFile = chooser.getSelectedFile();
-            int indexOfdot = csvFile.getName().lastIndexOf(".");
-            String onlyName = csvFile.getName().substring(0, indexOfdot);
+            templateFile = chooser.getSelectedFile();
+            
+            int indexOfdot = templateFile.getName().lastIndexOf(".");
+            String onlyName = templateFile.getName().substring(0, indexOfdot);
             txtTemplateFileName.setText(onlyName);
+            
+            controller.analyzeTemplate(templateFile);
         }
     } 
     
@@ -416,8 +423,17 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     @Override
     public void updateGroupIndicator(boolean value) {
         handleToggleButton(value);
-        if(!value) {
-            jcbxGroupColumn.setSelectedIndex(0);
-        }
+    }
+
+    @Override
+    public void updateHolderStart(String value) {
+        txtHolderStart.setText(value);
+        lblExampleHolderStart.setText(txtHolderStart.getText());
+    }
+
+    @Override
+    public void updateHolderEnd(String value) {
+        txtHolderEnd.setText(value);
+        lblExampleHolderEnd.setText(txtHolderEnd.getText());
     }
 }

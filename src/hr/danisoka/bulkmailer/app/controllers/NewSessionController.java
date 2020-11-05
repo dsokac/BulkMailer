@@ -2,12 +2,15 @@ package hr.danisoka.bulkmailer.app.controllers;
 
 import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
 import hr.danisoka.bulkmailer.app.utils.CsvUtils;
+import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewSessionController implements NewSessionWinContract.Controller {
 
@@ -106,6 +109,49 @@ public class NewSessionController implements NewSessionWinContract.Controller {
         String header = internalCount > 1 ? null : headers.get(maxCountIndex);
         view.updateGroupIndicator(header != null);
         view.updateGroupColumnCombobox(header);
+    }
+
+    @Override
+    public void analyzeTemplate(File file) {
+        try {
+            String content = FileUtils.getFileContent(file);
+            Pattern pattern = Pattern.compile("([^\\w\\s\\/\"])\\1", Pattern.MULTILINE);
+            Matcher m  = pattern.matcher(content);
+            
+            String possibleHolder1 = "";
+            int holder1_count = 0;
+            String possibleHolder2 = "";
+            int holder2_count = 0;
+            
+            int count = 0;
+            while(m.find()) {
+               String match = m.group(0);
+               if(count < 2) {
+                   if(count == 0) {
+                       possibleHolder1 = match;
+                   } else {
+                       possibleHolder2 = match;
+                   }
+               } else {
+                   if(count%2 == 0 && possibleHolder1.equals(match)) {
+                       holder1_count++;
+                   } else if(count%2 == 1 && possibleHolder2.equals(match)) {
+                       holder2_count++;
+                   }
+               }
+               count++;
+               if(holder1_count > 2 && holder2_count > 2 && holder1_count == holder2_count) {
+                   break;
+               }
+            }
+            
+            if(holder1_count > 2 && holder2_count > 2 && holder1_count == holder2_count) {
+                view.updateHolderStart(possibleHolder1);
+                view.updateHolderEnd(possibleHolder2);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

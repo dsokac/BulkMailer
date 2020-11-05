@@ -9,11 +9,14 @@ public interface NewSessionWinContract {
         void storeTemplateData(File file, String newName);
         List<String> fetchHeadersFromStudentsData(File file);
         void analyzeStudentData(File file);
+        void analyzeTemplate(File file);
     }
     
     interface View {
         void updateEmailColumnCombobox(String selectedValue);
         void updateGroupColumnCombobox(String selectedValue);
         void updateGroupIndicator(boolean value);
+        void updateHolderStart(String value);
+        void updateHolderEnd(String value);
     }
 }
