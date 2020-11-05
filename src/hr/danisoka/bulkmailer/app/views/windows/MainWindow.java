@@ -8,20 +8,22 @@ package hr.danisoka.bulkmailer.app.views.windows;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.controllers.NewSessionController;
+import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
+import hr.danisoka.bulkmailer.app.models.Session;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
-import javax.swing.JDialog;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Danijel
  */
-public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener{
+public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener, SessionListener{
 
     /**
      * Creates new form MainWindow
@@ -175,8 +177,9 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     
     private void handleSessionCreation() {
         this.setEnabled(false);
-        NewSessionWindow newSession = new NewSessionWindow();
-        NewSessionController controller = new NewSessionController(newSession, this);
+        NewSessionWindow newSession = new NewSessionWindow(this);
+        NewSessionController controller = new NewSessionController(newSession);
+        controller.setErrorListener(newSession);
         newSession.setController(controller);
         newSession.setVisible(true);
         newSession.addComponentListener(new ComponentAdapter() {
@@ -190,5 +193,17 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     @Override
     public void onErrorOccurred(Exception ex, String message) {
         JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void onSessionCreated(Session session) {
+        String name = session.getName() == null ? session.getCreatedAt().toString() : session.getName();
+        System.out.println(String.format("Kreirana je sesija '%s' u %s.", name, session.getCreatedAt()));
+        System.out.println("hr.danisoka.bulkmailer.app.views.windows.MainWindow.onSessionCreated()");
+    }
+
+    @Override
+    public void onSessionsArrived(List<Session> sessions) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

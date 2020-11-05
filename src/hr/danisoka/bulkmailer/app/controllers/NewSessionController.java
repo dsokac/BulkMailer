@@ -1,7 +1,12 @@
 package hr.danisoka.bulkmailer.app.controllers;
 
+import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
+import hr.danisoka.bulkmailer.app.db.AppDatabase;
+import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
+import hr.danisoka.bulkmailer.app.models.RawSessionData;
+import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.utils.CsvUtils;
 import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import java.io.File;
@@ -19,8 +24,11 @@ public class NewSessionController implements NewSessionWinContract.Controller {
     private NewSessionWinContract.View view;
     private MailLoggerHandler.LoggerErrorListener errorListener;
     
-    public NewSessionController(NewSessionWinContract.View view, MailLoggerHandler.LoggerErrorListener errorListener) {
-        this.view = view;
+    public NewSessionController(NewSessionWinContract.View view) {
+        this.view = view; 
+    }
+    
+    public void setErrorListener(MailLoggerHandler.LoggerErrorListener errorListener) {
         this.errorListener = errorListener;
     }
     
@@ -171,6 +179,39 @@ public class NewSessionController implements NewSessionWinContract.Controller {
             }
         } catch (IOException ex) {
             Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void createSession(RawSessionData sessionData) {
+        try {
+            File dataDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.CSV_FOLDER);
+            String newDataFileName = FileUtils.isNameEqual(sessionData.getDataFile(), sessionData.getDataFileName()) ? null : sessionData.getDataFileName();
+            File dataFile = FileUtils.storeFile(sessionData.getDataFile(), dataDir, newDataFileName);
+            
+            File templateDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
+            String newTemplateFileName = FileUtils.isNameEqual(sessionData.getTemplateFile(), sessionData.getTemplateFileName()) ? null : sessionData.getTemplateFileName();
+            File templateFile = FileUtils.storeFile(sessionData.getTemplateFile(), templateDir, newTemplateFileName);
+            
+            sessionData.setDataFile(dataFile, null);
+            sessionData.setTemplateFile(templateFile, null);
+            
+            Session session = Session.convertFrom(sessionData);
+            AppDatabase db = AppDatabase.getInstance();
+            SessionDaoImpl dao = db.sessionDaoImpl;
+            dao.create(session);
+            view.sessionCreated(session);
+
+        } catch (IOException ex) {
+            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, String.format("Ne mogu kreirati datoteku! %s", ex.getMessage()));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, ex.getMessage());
+            }
         }
     }
     

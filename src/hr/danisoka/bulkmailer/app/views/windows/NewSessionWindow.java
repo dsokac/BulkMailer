@@ -6,6 +6,10 @@
 package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
+import hr.danisoka.bulkmailer.app.listeners.SessionListener;
+import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
+import hr.danisoka.bulkmailer.app.models.RawSessionData;
+import hr.danisoka.bulkmailer.app.models.Session;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -15,21 +19,23 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Danijel
  */
-public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWinContract.View{
+public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
 
     /**
      * Creates new form NewSessionWindow
      */
-    public NewSessionWindow() {
+    public NewSessionWindow(SessionListener listener) {
         initComponents();
         connectHolderTextboxesWithPreview();
         setupButtons();
+        this.listener = listener;
     }
 
     /**
@@ -282,6 +288,7 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     private File templateFile;
     private NewSessionWinContract.Controller controller;
     private List<String> studentsDataHeaders;
+    private SessionListener listener;
     
     public void setController(NewSessionWinContract.Controller controller) {
         this.controller = controller;
@@ -397,7 +404,15 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     }
     
     private void handleSaveDialog() {
-        
+        RawSessionData sessionData = new RawSessionData();
+        sessionData.setName(null); //TODO implementirati
+        sessionData.setDataFile(csvFile, txtStudentDataFileName.getText());
+        sessionData.setEmailColumn(jcbxEmailColumn.getSelectedIndex() == 0 ? null : jcbxEmailColumn.getSelectedItem().toString());
+        sessionData.setGrouped(jtbtnGroupIndicator.isSelected());
+        sessionData.setGroupColumn(jcbxGroupColumn.getSelectedIndex() == 0 ? null : jcbxGroupColumn.getSelectedItem().toString());
+        sessionData.setTemplateFile(templateFile, txtTemplateFileName.getText());
+        sessionData.setHolder(txtHolderStart.getText(), txtHolderEnd.getText());
+        controller.createSession(sessionData);
     }
     
     private void handleCombobox(JComboBox cbx, List<String> items, String initialItem) {
@@ -435,5 +450,19 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     public void updateHolderEnd(String value) {
         txtHolderEnd.setText(value);
         lblExampleHolderEnd.setText(txtHolderEnd.getText());
+    }
+
+    @Override
+    public void sessionCreated(Session session) {
+        if(listener != null) {
+            listener.onSessionCreated(session);
+        }
+        JOptionPane.showMessageDialog(this, "Nova sesija za skupni e-mail je kreirana.", "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+        this.setVisible(false);
+    }
+
+    @Override
+    public void onErrorOccurred(Exception ex, String message) {
+        JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
     }
 }

@@ -227,6 +227,17 @@ public class Session {
         return true;
     }
 
-       
+    public static Session convertFrom(RawSessionData sessionData) {
+        Session session = new Session();
+        session.setName(sessionData.getName());
+        session.setDataFilePath(sessionData.getDataFile().getAbsolutePath());
+        session.setEmailColumn(sessionData.getEmailColumn());
+        session.setHasGroup(sessionData.isGrouped());
+        session.setGroupColumn(sessionData.getGroupColumn());
+        session.setTemplateFilePath(sessionData.getTemplateFile().getAbsolutePath());
+        session.setHolderStart(sessionData.getHolderStart());
+        session.setHolderEnd(sessionData.getHolderEnd());
+        return session;
+    }   
     
 }
