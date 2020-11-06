@@ -8,6 +8,7 @@ package hr.danisoka.bulkmailer.app.views.windows.panels;
 import hr.danisoka.bulkmailer.app.models.Session;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -49,8 +50,8 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         btnReports = new javax.swing.JButton();
 
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
-        setMinimumSize(new java.awt.Dimension(686, 141));
-        setPreferredSize(new java.awt.Dimension(686, 141));
+        setMinimumSize(new java.awt.Dimension(686, 160));
+        setPreferredSize(new java.awt.Dimension(686, 160));
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
         layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
         layout.rowHeights = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
@@ -129,6 +130,8 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 2;
         add(btnStartSession, gridBagConstraints);
 
+        btnDelete.setBackground(new java.awt.Color(255, 0, 0));
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Obriši sesiju");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 24;
@@ -169,15 +172,16 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private Session session;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
     
     private void populateView() {
-        String sessionName = session.getName() != null ? session.getName() : session.getCreatedAt().toString();
+        String sessionName = session.getName() != null ? session.getName() : String.format("Sessija kreirana %s", sdf.format(session.getCreatedAt()));
         lblSessionName.setText(sessionName);
         jcboxDataFile.setSelected(session.getDataFilePath() != null && !session.getDataFilePath().isEmpty());
         jcboxTemplateFile.setSelected(session.getTemplateFilePath()!= null && !session.getTemplateFilePath().isEmpty());
         jcboxGroup.setSelected(session.hasGroup());
         lblAttemptValue.setText(session.getAttempts() != null ? String.valueOf(session.getAttempts().size()) : "-");
-        lblCreatedAtValue.setText(session.getCreatedAt().toString());
+        lblCreatedAtValue.setText(sdf.format(session.getCreatedAt()));
     }
     
     private void setupButtons() {
