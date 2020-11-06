@@ -8,16 +8,26 @@ package hr.danisoka.bulkmailer.app.views.windows;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.controllers.NewSessionController;
+import hr.danisoka.bulkmailer.app.db.AppDatabase;
+import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.views.windows.panels.SessionContainerPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Box;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -53,6 +63,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpnlSessions = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jmbMainBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmFileNew = new javax.swing.JMenu();
@@ -61,6 +73,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jpnlSessions.setBorder(javax.swing.BorderFactory.createTitledBorder("Sesije skupnog e-maila"));
+        jpnlSessions.setLayout(new javax.swing.BoxLayout(jpnlSessions, javax.swing.BoxLayout.Y_AXIS));
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jpnlSessions.add(jScrollPane1);
 
         jMenu1.setText("File");
 
@@ -92,11 +110,17 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpnlSessions, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpnlSessions, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -139,6 +163,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
                 MainWindow main = new MainWindow();
                 main.handleCredentials();
                 main.setVisible(true);
+                main.loadSessions();
             }
         });
     }
@@ -146,10 +171,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu jmFileNew;
     private javax.swing.JMenuBar jmbMainBar;
     private javax.swing.JMenuItem jmiFileChangeCreds;
     private javax.swing.JMenuItem jmiNewSession;
+    private javax.swing.JPanel jpnlSessions;
     // End of variables declaration//GEN-END:variables
 
     private MainWindow obj = this;       
@@ -205,5 +232,29 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     @Override
     public void onSessionsArrived(List<Session> sessions) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void loadSessions() {
+        AppDatabase db = AppDatabase.getInstance();
+        SessionDaoImpl dao = db.sessionDaoImpl;
+        List<Session> sessions;
+        try {
+            sessions = dao.queryForAll();
+            for(Session session : sessions) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        SessionContainerPanel sessionContainer = new SessionContainerPanel(session);
+                        sessionContainer.setVisible(true);
+                        obj.jpnlSessions.add(sessionContainer, BorderLayout.NORTH);
+                        obj.jpnlSessions.add(Box.createRigidArea(new Dimension(0, 7)));
+                        obj.jpnlSessions.revalidate();
+                    }
+                });
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
