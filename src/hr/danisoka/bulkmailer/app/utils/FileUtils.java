@@ -52,4 +52,10 @@ public final class FileUtils {
         return name.equals(fullNewName);
     }
     
+    public static String extractFileName(File file) {
+        String name = file.getName();
+        int indexOfDot = name.lastIndexOf(".");
+        name = name.substring(0, indexOfDot);
+        return name;
+    }
 }
