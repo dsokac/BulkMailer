@@ -14,6 +14,8 @@ public class RawSessionData {
     private String templateFileName;
     private String holderStart;
     private String holderEnd;
+    private boolean dataUploaded;
+    private boolean templateUploaded;
 
     public String getName() {
         return name;
@@ -84,5 +86,24 @@ public class RawSessionData {
 
     public String getTemplateFileName() {
         return templateFileName;
-    }    
+    }   
+
+    public boolean isDataUploaded() {
+        return dataUploaded;
+    }
+
+    public void setDataUploaded(boolean dataUploaded) {
+        this.dataUploaded = dataUploaded;
+    }
+
+    public boolean isTemplateUploaded() {
+        return templateUploaded;
+    }
+
+    public void setTemplateUploaded(boolean templateUploaded) {
+        this.templateUploaded = templateUploaded;
+    }
+
+        
+    
 }

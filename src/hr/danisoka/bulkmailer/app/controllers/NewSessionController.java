@@ -187,11 +187,17 @@ public class NewSessionController implements NewSessionWinContract.Controller {
         try {
             File dataDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.CSV_FOLDER);
             String newDataFileName = FileUtils.isNameEqual(sessionData.getDataFile(), sessionData.getDataFileName()) ? null : sessionData.getDataFileName();
-            File dataFile = FileUtils.storeFile(sessionData.getDataFile(), dataDir, newDataFileName);
-            
+            File dataFile = new File(dataDir, sessionData.getDataFile().getName());
+            if(sessionData.isDataUploaded()|| (!sessionData.isDataUploaded() && (!dataFile.exists() || !FileUtils.isNameEqual(dataFile, sessionData.getDataFileName())))) {
+                dataFile = FileUtils.storeFile(sessionData.getDataFile(), dataDir, newDataFileName);
+            }
+                        
             File templateDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
-            String newTemplateFileName = FileUtils.isNameEqual(sessionData.getTemplateFile(), sessionData.getTemplateFileName()) ? null : sessionData.getTemplateFileName();
-            File templateFile = FileUtils.storeFile(sessionData.getTemplateFile(), templateDir, newTemplateFileName);
+            String newTemplateFileName = FileUtils.isNameEqual(sessionData.getTemplateFile(), sessionData.getTemplateFileName()) ? null : sessionData.getTemplateFileName();          
+            File templateFile = new File(templateDir, sessionData.getTemplateFile().getName());
+            if(sessionData.isTemplateUploaded()|| (!sessionData.isTemplateUploaded() && (!templateFile.exists() || !FileUtils.isNameEqual(templateFile, sessionData.getTemplateFileName())))) {
+                templateFile = FileUtils.storeFile(sessionData.getTemplateFile(), templateDir, newTemplateFileName);
+            }
             
             sessionData.setDataFile(dataFile, null);
             sessionData.setTemplateFile(templateFile, null);

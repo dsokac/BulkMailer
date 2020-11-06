@@ -5,18 +5,26 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows;
 
+import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.RawSessionData;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.models.comboboxes.FileStringComboboxModel;
+import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -35,6 +43,7 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         initComponents();
         connectHolderTextboxesWithPreview();
         setupButtons();
+        setupComboboxes();
         this.listener = listener;
     }
 
@@ -49,7 +58,6 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
 
         btnDataUpload = new javax.swing.JButton();
         lblStudentDataFileName = new javax.swing.JLabel();
-        txtStudentDataFileName = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         lblEmailColumn = new javax.swing.JLabel();
         jcbxEmailColumn = new javax.swing.JComboBox<>();
@@ -59,7 +67,6 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         jcbxGroupColumn = new javax.swing.JComboBox<>();
         btnTemplateUpload = new javax.swing.JButton();
         lblTemplateFileName = new javax.swing.JLabel();
-        txtTemplateFileName = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
         lblHolderStart = new javax.swing.JLabel();
         txtHolderStart = new javax.swing.JTextField();
@@ -71,6 +78,8 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         lblExampleHolderEnd = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        jcbxStudentFile = new javax.swing.JComboBox<>();
+        jcbxTemplateFiles = new javax.swing.JComboBox<>();
 
         setTitle("Sesija skupnog e-maila");
         setAlwaysOnTop(true);
@@ -92,14 +101,6 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
         getContentPane().add(lblStudentDataFileName, gridBagConstraints);
-
-        txtStudentDataFileName.setMinimumSize(new java.awt.Dimension(300, 20));
-        txtStudentDataFileName.setPreferredSize(new java.awt.Dimension(300, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.ipady = 7;
-        getContentPane().add(txtStudentDataFileName, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 22;
@@ -162,14 +163,6 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 20;
         getContentPane().add(lblTemplateFileName, gridBagConstraints);
-
-        txtTemplateFileName.setMinimumSize(new java.awt.Dimension(300, 20));
-        txtTemplateFileName.setPreferredSize(new java.awt.Dimension(300, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.ipady = 8;
-        getContentPane().add(txtTemplateFileName, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
@@ -253,6 +246,29 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(btnCancel, gridBagConstraints);
 
+        jcbxStudentFile.setEditable(true);
+        jcbxStudentFile.setToolTipText("");
+        jcbxStudentFile.setMinimumSize(new java.awt.Dimension(300, 20));
+        jcbxStudentFile.setPreferredSize(new java.awt.Dimension(300, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(jcbxStudentFile, gridBagConstraints);
+
+        jcbxTemplateFiles.setEditable(true);
+        jcbxTemplateFiles.setMinimumSize(new java.awt.Dimension(300, 20));
+        jcbxTemplateFiles.setPreferredSize(new java.awt.Dimension(300, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(jcbxTemplateFiles, gridBagConstraints);
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -267,6 +283,8 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JComboBox<String> jcbxEmailColumn;
     private javax.swing.JComboBox<String> jcbxGroupColumn;
+    private javax.swing.JComboBox<String> jcbxStudentFile;
+    private javax.swing.JComboBox<String> jcbxTemplateFiles;
     private javax.swing.JToggleButton jtbtnGroupIndicator;
     private javax.swing.JLabel lblEmailColumn;
     private javax.swing.JLabel lblExampleHolderEnd;
@@ -280,8 +298,6 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     private javax.swing.JLabel lblTemplateFileName;
     private javax.swing.JTextField txtHolderEnd;
     private javax.swing.JTextField txtHolderStart;
-    private javax.swing.JTextField txtStudentDataFileName;
-    private javax.swing.JTextField txtTemplateFileName;
     // End of variables declaration//GEN-END:variables
 
     private File csvFile;
@@ -289,6 +305,8 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     private NewSessionWinContract.Controller controller;
     private List<String> studentsDataHeaders;
     private SessionListener listener;
+    private boolean dataUploaded = false;
+    private boolean templateUploaded = false;
     
     public void setController(NewSessionWinContract.Controller controller) {
         this.controller = controller;
@@ -361,6 +379,11 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         });
     }
     
+    private void setupComboboxes() {
+        populateCombobox(jcbxStudentFile, AppConstants.AppSettings.Folders.CSV_FOLDER);
+        populateCombobox(jcbxTemplateFiles, AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
+    }
+    
     private void handleCsvDataUpload() {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV filter", "csv");
@@ -370,15 +393,17 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         if(outcome == JFileChooser.APPROVE_OPTION) {
             csvFile = chooser.getSelectedFile();
             
-            int indexOfdot = csvFile.getName().lastIndexOf(".");
-            String onlyName = csvFile.getName().substring(0, indexOfdot);
-            txtStudentDataFileName.setText(onlyName);
+            FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
+            model.insertFileItemAt(csvFile, 0);
+            jcbxStudentFile.setModel(model);
+            jcbxStudentFile.setSelectedIndex(0);
             
             studentsDataHeaders = controller.fetchHeadersFromStudentsData(csvFile);
             handleCombobox(jcbxEmailColumn, studentsDataHeaders, "Nije odabrano");
             handleCombobox(jcbxGroupColumn, studentsDataHeaders, "Nije odabrano");
             
             controller.analyzeStudentData(csvFile);
+            dataUploaded = true;
         }
     }
     
@@ -391,11 +416,13 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
         if(outcome == JFileChooser.APPROVE_OPTION) {
             templateFile = chooser.getSelectedFile();
             
-            int indexOfdot = templateFile.getName().lastIndexOf(".");
-            String onlyName = templateFile.getName().substring(0, indexOfdot);
-            txtTemplateFileName.setText(onlyName);
+            FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+            model.insertFileItemAt(templateFile, 0);
+            jcbxTemplateFiles.setModel(model);
+            jcbxTemplateFiles.setSelectedIndex(0);
             
             controller.analyzeTemplate(templateFile);
+            templateUploaded = true;
         }
     } 
     
@@ -404,14 +431,19 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     }
     
     private void handleSaveDialog() {
+        FileStringComboboxModel studentFileModel = (FileStringComboboxModel)jcbxStudentFile.getModel();
+        FileStringComboboxModel templateFileModel = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+        
         RawSessionData sessionData = new RawSessionData();
         sessionData.setName(null); //TODO implementirati
-        sessionData.setDataFile(csvFile, txtStudentDataFileName.getText());
+        sessionData.setDataFile(csvFile == null ? studentFileModel.getSelectedFileItem() : csvFile, jcbxStudentFile.getSelectedItem().toString());
         sessionData.setEmailColumn(jcbxEmailColumn.getSelectedIndex() == 0 ? null : jcbxEmailColumn.getSelectedItem().toString());
         sessionData.setGrouped(jtbtnGroupIndicator.isSelected());
         sessionData.setGroupColumn(jcbxGroupColumn.getSelectedIndex() == 0 ? null : jcbxGroupColumn.getSelectedItem().toString());
-        sessionData.setTemplateFile(templateFile, txtTemplateFileName.getText());
+        sessionData.setTemplateFile(templateFile== null ? templateFileModel.getSelectedFileItem() : templateFile, jcbxTemplateFiles.getSelectedItem().toString());
         sessionData.setHolder(txtHolderStart.getText(), txtHolderEnd.getText());
+        sessionData.setDataUploaded(dataUploaded);
+        sessionData.setTemplateUploaded(templateUploaded);
         controller.createSession(sessionData);
     }
     
@@ -465,4 +497,15 @@ public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWi
     public void onErrorOccurred(Exception ex, String message) {
         JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
     }
+    
+    private void populateCombobox(JComboBox cmbox, String dirPath) {
+        List<String> items = new ArrayList<>();
+        File dir = FileUtils.getDirectory(dirPath);
+        File[] dirContent = dir.listFiles();
+        
+        ComboBoxModel<String> model = new FileStringComboboxModel(dirContent, FileStringComboboxModel.convertToStringArray(dirContent));
+        cmbox.setModel(model);
+        cmbox.setSelectedIndex(-1);
+    }
+    
 }
