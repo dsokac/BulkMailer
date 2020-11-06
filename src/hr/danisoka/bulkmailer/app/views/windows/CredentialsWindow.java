@@ -7,8 +7,6 @@ package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.contracts.CredentialsWinContract;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;

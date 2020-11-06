@@ -34,12 +34,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Danijel
  */
-public class NewSessionWindow extends javax.swing.JFrame implements NewSessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
+public class SessionWindow extends javax.swing.JFrame implements NewSessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
 
     /**
      * Creates new form NewSessionWindow
      */
-    public NewSessionWindow(SessionListener listener) {
+    public SessionWindow(SessionListener listener) {
         initComponents();
         connectHolderTextboxesWithPreview();
         setupButtons();

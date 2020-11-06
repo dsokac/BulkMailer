@@ -204,7 +204,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     
     private void handleSessionCreation() {
         this.setEnabled(false);
-        NewSessionWindow newSession = new NewSessionWindow(this);
+        SessionWindow newSession = new SessionWindow(this);
         NewSessionController controller = new NewSessionController(newSession);
         controller.setErrorListener(newSession);
         newSession.setController(controller);
