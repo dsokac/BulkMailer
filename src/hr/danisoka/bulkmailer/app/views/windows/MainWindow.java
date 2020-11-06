@@ -53,6 +53,10 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
                 obj.handleSessionCreation();
             }
         });
+        int inc = 20;
+        jScrollPane2.getVerticalScrollBar().setUnitIncrement(inc);
+        jScrollPane2.getHorizontalScrollBar().setUnitIncrement(inc);
+        
     }
 
     /**
@@ -64,7 +68,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     private void initComponents() {
 
         jpnlSessions = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jpSessionList = new javax.swing.JPanel();
         jmbMainBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmFileNew = new javax.swing.JMenu();
@@ -77,8 +82,10 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jpnlSessions.setBorder(javax.swing.BorderFactory.createTitledBorder("Sesije skupnog e-maila"));
         jpnlSessions.setLayout(new javax.swing.BoxLayout(jpnlSessions, javax.swing.BoxLayout.Y_AXIS));
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jpnlSessions.add(jScrollPane1);
+        jpSessionList.setLayout(new javax.swing.BoxLayout(jpSessionList, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(jpSessionList);
+
+        jpnlSessions.add(jScrollPane2);
 
         jMenu1.setText("File");
 
@@ -171,11 +178,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu jmFileNew;
     private javax.swing.JMenuBar jmbMainBar;
     private javax.swing.JMenuItem jmiFileChangeCreds;
     private javax.swing.JMenuItem jmiNewSession;
+    private javax.swing.JPanel jpSessionList;
     private javax.swing.JPanel jpnlSessions;
     // End of variables declaration//GEN-END:variables
 
@@ -246,9 +254,9 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
                     public void run() {
                         SessionContainerPanel sessionContainer = new SessionContainerPanel(session);
                         sessionContainer.setVisible(true);
-                        obj.jpnlSessions.add(sessionContainer, BorderLayout.NORTH);
-                        obj.jpnlSessions.add(Box.createRigidArea(new Dimension(0, 7)));
-                        obj.jpnlSessions.revalidate();
+                        obj.jpSessionList.add(sessionContainer, BorderLayout.NORTH);
+                        obj.jpSessionList.add(Box.createRigidArea(new Dimension(0, 14)));
+                        obj.jpSessionList.revalidate();
                     }
                 });
             }
