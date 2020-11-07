@@ -173,7 +173,7 @@ public class SessionDataController implements SessionWinContract.Controller {
     }
 
     @Override
-    public void createSession(RawSessionData sessionData) {
+    public void createOrUpdateSession(RawSessionData sessionData, Session session) {
         try {
             File dataDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.CSV_FOLDER);
             String newDataFileName = FileUtils.isNameEqual(sessionData.getDataFile(), sessionData.getDataFileName()) ? null : sessionData.getDataFileName();

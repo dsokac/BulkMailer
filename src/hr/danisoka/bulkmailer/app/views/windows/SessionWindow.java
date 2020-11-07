@@ -486,7 +486,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         sessionData.setHolder(txtHolderStart.getText(), txtHolderEnd.getText());
         sessionData.setDataUploaded(dataUploaded);
         sessionData.setTemplateUploaded(templateUploaded);
-        controller.createSession(sessionData);
+        controller.createOrUpdateSession(sessionData, session);
     }
     
     private void handleCombobox(JComboBox cbx, List<String> items, String initialItem) {

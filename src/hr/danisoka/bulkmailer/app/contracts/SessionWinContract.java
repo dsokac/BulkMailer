@@ -10,7 +10,7 @@ public interface SessionWinContract {
         List<String> fetchHeadersFromStudentsData(File file);
         void analyzeStudentData(File file);
         void analyzeTemplate(File file);
-        void createSession(RawSessionData sessionData);
+        void createOrUpdateSession(RawSessionData sessionData, Session session);
     }
     
     interface View {
