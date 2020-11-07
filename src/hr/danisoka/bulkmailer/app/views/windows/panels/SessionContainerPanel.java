@@ -5,7 +5,10 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows.panels;
 
+import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
+import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.views.windows.SessionWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -19,8 +22,9 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     /**
      * Creates new form SessionContainerPanel
      */
-    public SessionContainerPanel(Session session) {
+    public SessionContainerPanel(Session session, SessionListener listener) {
         initComponents();
+        this.listener = listener;
         this.session = session;        
         populateView();
         setupButtons();
@@ -173,6 +177,7 @@ public class SessionContainerPanel extends javax.swing.JPanel {
 
     private Session session;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
+    private SessionListener listener;
     
     private void populateView() {
         String sessionName = session.getName() != null ? session.getName() : String.format("Sessija kreirana %s", sdf.format(session.getCreatedAt()));
@@ -219,7 +224,12 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     }
     
     private void updateBulkMailSession() {
-        
+        SessionWindow sessionWin = new SessionWindow(session, listener);
+        SessionDataController controller = new SessionDataController(sessionWin);
+        controller.setErrorListener(sessionWin);
+        sessionWin.setController(controller);
+        sessionWin.populateValues();
+        sessionWin.setVisible(true);
     }
     
     private void deleteBulkMailSession() {

@@ -15,6 +15,8 @@ import hr.danisoka.bulkmailer.app.models.comboboxes.FileStringComboboxModel;
 import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -45,6 +47,16 @@ public class SessionWindow extends javax.swing.JFrame implements NewSessionWinCo
         setupButtons();
         setupComboboxes();
         this.listener = listener;
+    }
+    
+    public SessionWindow(Session session, SessionListener listener) {
+        initComponents();
+        this.session = session;
+        connectHolderTextboxesWithPreview();
+        setupButtons();
+        setupComboboxes();
+        this.listener = listener;        
+        btnSave.setText("Spremi");
     }
 
     /**
@@ -307,9 +319,21 @@ public class SessionWindow extends javax.swing.JFrame implements NewSessionWinCo
     private SessionListener listener;
     private boolean dataUploaded = false;
     private boolean templateUploaded = false;
+    private Session session;
+    private SessionWindow obj = this;
     
     public void setController(NewSessionWinContract.Controller controller) {
         this.controller = controller;
+    }
+    
+    public void populateValues() {
+        jcbxStudentFile.setSelectedItem(FileUtils.extractFileName(new File(session.getDataFilePath())));
+        jcbxTemplateFiles.setSelectedItem(FileUtils.extractFileName(new File(session.getTemplateFilePath())));
+        jcbxEmailColumn.setSelectedItem(session.getEmailColumn());
+        jcbxGroupColumn.setSelectedItem(session.getGroupColumn());
+        jtbtnGroupIndicator.setSelected(session.hasGroup());
+        txtHolderStart.setText(session.getHolderStart());
+        txtHolderEnd.setText(session.getHolderEnd());
     }
     
     private void connectHolderTextboxesWithPreview() {
@@ -382,6 +406,27 @@ public class SessionWindow extends javax.swing.JFrame implements NewSessionWinCo
     private void setupComboboxes() {
         populateCombobox(jcbxStudentFile, AppConstants.AppSettings.Folders.CSV_FOLDER);
         populateCombobox(jcbxTemplateFiles, AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
+        jcbxStudentFile.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
+                File csv = model.getSelectedFileItem();
+                
+                studentsDataHeaders = controller.fetchHeadersFromStudentsData(csv);
+                handleCombobox(jcbxEmailColumn, studentsDataHeaders, "Nije odabrano");
+                handleCombobox(jcbxGroupColumn, studentsDataHeaders, "Nije odabrano");
+                
+                obj.controller.analyzeStudentData(csv);
+            }
+        });
+        jcbxTemplateFiles.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+                File template = model.getSelectedFileItem();
+                obj.controller.analyzeTemplate(template);
+            }
+        });
     }
     
     private void handleCsvDataUpload() {
