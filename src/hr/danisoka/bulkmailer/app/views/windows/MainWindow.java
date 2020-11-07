@@ -240,27 +240,22 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     }
     
     public void loadSessions() {
-        AppDatabase db = AppDatabase.getInstance();
-        SessionDaoImpl dao = db.sessionDaoImpl;
-        List<Session> sessions;
-        try {
-            sessions = dao.queryForAll();
-            for(Session session : sessions) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        SessionContainerPanel sessionContainer = new SessionContainerPanel(session, obj);
-                        sessionContainer.setVisible(true);                        
-                        obj.jpSessionList.add(sessionContainer, BorderLayout.NORTH);
-                        obj.jpSessionList.add(Box.createRigidArea(new Dimension(0, 14)));
-                        obj.jpSessionList.revalidate();
-                    }
-                });
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {                         
+                AppDatabase db = AppDatabase.getInstance();
+                SessionDaoImpl dao = db.sessionDaoImpl;
+                List<Session> sessions;
+                try {
+                    sessions = dao.queryForAll();
+                    obj.onSessionsArrived(sessions);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    obj.onErrorOccurred(ex, ex.getMessage());
+                }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        });          
+    }
     
     private void initializeSessionView(Session session) {
         SessionContainerPanel sessionContainer = new SessionContainerPanel(session, obj);
