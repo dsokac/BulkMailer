@@ -14,7 +14,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CredentialsWindow extends javax.swing.JFrame implements CredentialsWinContract.View{
+public class CredentialsWindow extends javax.swing.JDialog implements CredentialsWinContract.View{
 
     /**
      * Creates new form CredentialsWindow
@@ -23,7 +23,7 @@ public class CredentialsWindow extends javax.swing.JFrame implements Credentials
         initComponents();
         lblErrorMessage.setVisible(false);
         setupButtons();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);        
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
@@ -48,14 +48,12 @@ public class CredentialsWindow extends javax.swing.JFrame implements Credentials
         jSeparator3 = new javax.swing.JSeparator();
         lblErrorMessage = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Korisnički podaci za e-mail");
-        setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(234, 191));
         setName("winCredentials"); // NOI18N
         setPreferredSize(new java.awt.Dimension(449, 250));
-        setType(java.awt.Window.Type.POPUP);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
         layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0};
         layout.rowHeights = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};

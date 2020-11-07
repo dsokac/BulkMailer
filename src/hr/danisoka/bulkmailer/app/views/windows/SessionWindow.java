@@ -34,7 +34,7 @@ import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
  *
  * @author Danijel
  */
-public class SessionWindow extends javax.swing.JFrame implements SessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
+public class SessionWindow extends javax.swing.JDialog implements SessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
 
     /**
      * Creates new form NewSessionWindow
@@ -45,6 +45,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         setupButtons();
         setupComboboxes();
         this.listener = listener;
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
     
     public SessionWindow(Session session, SessionListener listener) {
@@ -55,6 +56,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         setupComboboxes();
         this.listener = listener;        
         btnSave.setText("Spremi");
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**

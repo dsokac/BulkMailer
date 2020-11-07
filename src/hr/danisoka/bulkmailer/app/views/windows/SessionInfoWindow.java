@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
  *
  * @author Danijel
  */
-public class SessionInfoWindow extends javax.swing.JFrame {
+public class SessionInfoWindow extends javax.swing.JDialog {
 
     /**
      * Creates new form SessionInfoWindow
@@ -21,6 +21,7 @@ public class SessionInfoWindow extends javax.swing.JFrame {
         initComponents();
         this.session = session;
         populateView();
+        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
