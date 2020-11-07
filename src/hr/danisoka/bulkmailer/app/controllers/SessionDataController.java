@@ -19,12 +19,12 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NewSessionController implements NewSessionWinContract.Controller {
+public class SessionDataController implements NewSessionWinContract.Controller {
 
     private NewSessionWinContract.View view;
     private MailLoggerHandler.LoggerErrorListener errorListener;
     
-    public NewSessionController(NewSessionWinContract.View view) {
+    public SessionDataController(NewSessionWinContract.View view) {
         this.view = view; 
     }
     
@@ -48,12 +48,12 @@ public class NewSessionController implements NewSessionWinContract.Controller {
         try {
             data = CsvUtils.getHeaderFromFile(file, ";");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu pronaći datoteku: '%s'", file.getAbsolutePath()));
             }
         } catch (IOException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu pročitati datoteku: '%s'", file.getAbsolutePath()));
             }
@@ -70,12 +70,12 @@ public class NewSessionController implements NewSessionWinContract.Controller {
             handleEmailColumn(headers);
             handleGroupColumn(data, headers);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu pronaći datoteku: '%s'", file.getAbsolutePath()));
             }
         }catch (IOException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu pročitati datoteku: '%s'", file.getAbsolutePath()));
             }
@@ -178,7 +178,7 @@ public class NewSessionController implements NewSessionWinContract.Controller {
                 view.updateHolderEnd(possibleHolder2);
             }
         } catch (IOException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -209,12 +209,12 @@ public class NewSessionController implements NewSessionWinContract.Controller {
             view.sessionCreated(session);
 
         } catch (IOException ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu kreirati datoteku! %s", ex.getMessage()));
             }
         } catch (Exception ex) {
-            Logger.getLogger(NewSessionController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, ex.getMessage());
             }

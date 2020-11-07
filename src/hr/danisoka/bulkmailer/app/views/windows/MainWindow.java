@@ -7,7 +7,7 @@ package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
-import hr.danisoka.bulkmailer.app.controllers.NewSessionController;
+import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.db.AppDatabase;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
@@ -213,7 +213,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     private void handleSessionCreation() {
         this.setEnabled(false);
         SessionWindow newSession = new SessionWindow(this);
-        NewSessionController controller = new NewSessionController(newSession);
+        SessionDataController controller = new SessionDataController(newSession);
         controller.setErrorListener(newSession);
         newSession.setController(controller);
         newSession.setVisible(true);
@@ -252,8 +252,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SessionContainerPanel sessionContainer = new SessionContainerPanel(session);
-                        sessionContainer.setVisible(true);
+                        SessionContainerPanel sessionContainer = new SessionContainerPanel(session, obj);
+                        sessionContainer.setVisible(true);                        
                         obj.jpSessionList.add(sessionContainer, BorderLayout.NORTH);
                         obj.jpSessionList.add(Box.createRigidArea(new Dimension(0, 14)));
                         obj.jpSessionList.revalidate();
