@@ -547,8 +547,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         if(listener != null) {
             listener.onSessionUpdated(session);
         }
-        String sessionName = session.getName() != null ? session.getName() : String.format("Sessija kreirana %s", sdf.format(session.getCreatedAt()));
-        JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno ažurirana.", sessionName), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno ažurirana.", session.getName()), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
         this.setVisible(false);
     }  
 

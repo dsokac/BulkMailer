@@ -189,8 +189,7 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     private SessionListener listener;
     
     private void populateView() {
-        String sessionName = session.getName() != null ? session.getName() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
-        lblSessionName.setText(sessionName);
+        lblSessionName.setText(session.getName());
         jcboxDataFile.setSelected(session.getDataFilePath() != null && !session.getDataFilePath().isEmpty());
         jcboxTemplateFile.setSelected(session.getTemplateFilePath()!= null && !session.getTemplateFilePath().isEmpty());
         jcboxGroup.setSelected(session.hasGroup());
@@ -254,8 +253,7 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     }
     
     private void deleteBulkMailSession() {
-        String sessionName = session.getName() != null ? session.getName() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
-        if(JOptionPane.showConfirmDialog(this, String.format("Jesi li siguran da želiš obrisati sesiju '%s'?", sessionName), "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
+        if(JOptionPane.showConfirmDialog(this, String.format("Jesi li siguran da želiš obrisati sesiju '%s'?", session.getName()), "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
             SessionContainerPanel obj = this;
             SessionDataController controller = new SessionDataController(null);
             controller.setErrorListener(new MailLoggerHandler.LoggerErrorListener() {
@@ -265,10 +263,10 @@ public class SessionContainerPanel extends javax.swing.JPanel {
                 }
             });
             if(controller.deleteSession(session, false)) {
-                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno izbrisana.", sessionName), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno izbrisana.", session.getName()), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
                 listener.onSessionDeleted(session);
             } else {
-                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' nije izbrisana.", sessionName), "Upozorenje", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' nije izbrisana.", session.getName()), "Upozorenje", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
