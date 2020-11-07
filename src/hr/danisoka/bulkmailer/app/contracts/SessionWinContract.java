@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface SessionWinContract {
     interface Controller {
-        void storeStudentsData(File file, String newName);
-        void storeTemplateData(File file, String newName);
         List<String> fetchHeadersFromStudentsData(File file);
         void analyzeStudentData(File file);
         void analyzeTemplate(File file);

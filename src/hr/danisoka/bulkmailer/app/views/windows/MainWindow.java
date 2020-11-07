@@ -29,10 +29,6 @@ import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author Danijel
- */
 public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener, SessionListener{
 
     /**

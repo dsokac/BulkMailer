@@ -31,16 +31,6 @@ public class SessionDataController implements SessionWinContract.Controller {
     public void setErrorListener(MailLoggerHandler.LoggerErrorListener errorListener) {
         this.errorListener = errorListener;
     }
-    
-    @Override
-    public void storeStudentsData(File file, String newName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void storeTemplateData(File file, String newName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public List<String> fetchHeadersFromStudentsData(File file) {

@@ -20,12 +20,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -544,7 +541,6 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
     }
     
     private void populateCombobox(JComboBox cmbox, String dirPath) {
-        List<String> items = new ArrayList<>();
         File dir = FileUtils.getDirectory(dirPath);
         File[] dirContent = dir.listFiles();
         
