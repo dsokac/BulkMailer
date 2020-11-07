@@ -7,11 +7,13 @@ package hr.danisoka.bulkmailer.app.views.windows.panels;
 
 import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
+import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.views.windows.SessionWindow;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
 
 public class SessionContainerPanel extends javax.swing.JPanel {
 
@@ -234,7 +236,23 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     }
     
     private void deleteBulkMailSession() {
-        
+        String sessionName = session.getName() != null ? session.getName() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
+        if(JOptionPane.showConfirmDialog(this, String.format("Jesi li siguran da želiš obrisati sesiju '%s'?", sessionName), "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
+            SessionContainerPanel obj = this;
+            SessionDataController controller = new SessionDataController(null);
+            controller.setErrorListener(new MailLoggerHandler.LoggerErrorListener() {
+                @Override
+                public void onErrorOccurred(Exception ex, String message) {
+                    JOptionPane.showMessageDialog(obj, message, "Greška!", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+            if(controller.deleteSession(session)) {
+                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno izbrisana.", sessionName), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+                listener.onSessionDeleted(session);
+            } else {
+                JOptionPane.showMessageDialog(this, String.format("Sesija '%s' nije izbrisana.", sessionName), "Upozorenje", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
     
     private void showBulkMailSessionReports() {

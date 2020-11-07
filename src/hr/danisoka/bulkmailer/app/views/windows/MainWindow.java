@@ -240,6 +240,11 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         sessionView.updateView(session);
         jpSessionList.revalidate();
     }
+    
+    @Override
+    public void onSessionDeleted(Session session) {
+        removeSessionView(session);
+    }
 
     @Override
     public void onSessionsArrived(List<Session> sessions) {
@@ -274,5 +279,10 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jpSessionList.add(Box.createRigidArea(new Dimension(0, 14)));
         jpSessionList.revalidate();
     }
+    
+    private void removeSessionView(Session session) {
+        SessionContainerPanel target = sessionItems.get(session.getId());
+        obj.jpSessionList.remove(target);
+        jpSessionList.revalidate();
     }
 }

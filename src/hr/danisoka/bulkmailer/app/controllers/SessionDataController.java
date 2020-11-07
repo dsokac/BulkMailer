@@ -18,6 +18,11 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
+import hr.danisoka.bulkmailer.app.db.DAOs.impl.AttemptDaoImpl;
+import hr.danisoka.bulkmailer.app.db.DAOs.impl.HolderMappingDaoImpl;
+import hr.danisoka.bulkmailer.app.models.Attempt;
+import hr.danisoka.bulkmailer.app.models.HolderMapping;
+import java.sql.SQLException;
 
 public class SessionDataController implements SessionWinContract.Controller {
 
@@ -213,6 +218,60 @@ public class SessionDataController implements SessionWinContract.Controller {
                 errorListener.onErrorOccurred(ex, String.format("Ne mogu kreirati datoteku! %s", ex.getMessage()));
             }
         } catch (Exception ex) {
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, ex.getMessage());
+            }
+        }
+    }
+    
+    public boolean deleteSession(Session session) {
+        int rowAffected = 0;
+        try {
+            handleDeletingFileSystem(session);
+            AppDatabase db = AppDatabase.getInstance();
+            SessionDaoImpl dao = db.sessionDaoImpl;
+            HolderMappingDaoImpl hmDao = db.holderMappingDaoImpl;
+            AttemptDaoImpl aDao = db.attemptDaoImpl;
+            
+            if(session.getHolderMappings() != null) {
+                hmDao.delete(session.getHolderMappings());
+            }
+            if(session.getAttempts() != null) {
+                aDao.delete(session.getAttempts());
+            }
+            rowAffected = dao.delete(session);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, ex.getMessage());
+            }
+        }
+        return rowAffected == 1;
+    }
+    
+    private void handleDeletingFileSystem(Session session) {
+        try {
+            AppDatabase db = AppDatabase.getInstance();
+            SessionDaoImpl dao = db.sessionDaoImpl;
+            List<Session> sessionWithSameDataFilePath = dao.queryForEq("data_file_path", session.getDataFilePath());
+            if(sessionWithSameDataFilePath.size() == 1) {
+                File f = new File(session.getDataFilePath());
+                f.delete();
+            }
+            List<Session> sessionWithSameTemplateFilePath = dao.queryForEq("template_file_path", session.getTemplateFilePath());
+            if(sessionWithSameTemplateFilePath.size() == 1) {
+                File f = new File(session.getTemplateFilePath());
+                f.delete();
+            }
+            if(session.getAttempts() != null) {
+                for(Attempt attempt : session.getAttempts()) {
+                    File f = new File(attempt.getReportFilePath());
+                    f.delete();
+                }
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
                 errorListener.onErrorOccurred(ex, ex.getMessage());
