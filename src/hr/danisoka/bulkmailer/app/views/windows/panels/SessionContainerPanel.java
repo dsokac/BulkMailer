@@ -176,7 +176,7 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     private SessionListener listener;
     
     private void populateView() {
-        String sessionName = session.getName() != null ? session.getName() : String.format("Sessija kreirana %s", sdf.format(session.getCreatedAt()));
+        String sessionName = session.getName() != null ? session.getName() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
         lblSessionName.setText(sessionName);
         jcboxDataFile.setSelected(session.getDataFilePath() != null && !session.getDataFilePath().isEmpty());
         jcboxTemplateFile.setSelected(session.getTemplateFilePath()!= null && !session.getTemplateFilePath().isEmpty());
