@@ -202,24 +202,22 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     private Map<Long, SessionContainerPanel> sessionItems = new HashMap<>();
     
     public void handleCredentials() {
-        this.setEnabled(false);
         BulkMailerApplication app = BulkMailerApplication.getInstance();
         CredentialsWindow credWin = new CredentialsWindow();
         CredentialsController controller = new CredentialsController(credWin);
-        credWin.setController(controller);
-        credWin.setVisible(true);
-
-            
+        credWin.setController(controller);        
+        
         credWin.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
                 BulkMailerApplication app = BulkMailerApplication.getInstance();
                 if(!app.areCredentialsPresent()) {
-                    obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));
+                    obj.dispatchEvent(new WindowEvent(obj, WindowEvent.WINDOW_CLOSING));                    
                 }
-                obj.setEnabled(true);
             }                
         });
+        
+        credWin.setVisible(true);
     }
     
     private void handleSessionCreation() {
@@ -228,13 +226,14 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         SessionDataController controller = new SessionDataController(newSession);
         controller.setErrorListener(newSession);
         newSession.setController(controller);
-        newSession.setVisible(true);
+
         newSession.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
                 obj.setEnabled(true);
             }                
         });
+        newSession.setVisible(true);
     }
 
     @Override
