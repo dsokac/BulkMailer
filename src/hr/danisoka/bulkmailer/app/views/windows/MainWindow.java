@@ -178,9 +178,9 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MainWindow main = new MainWindow();
-                main.handleCredentials();
                 main.setVisible(true);
                 main.loadSessions();
+                main.handleCredentials();
             }
         });
     }
