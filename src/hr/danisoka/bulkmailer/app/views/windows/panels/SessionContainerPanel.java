@@ -50,12 +50,13 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         btnDelete = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnReports = new javax.swing.JButton();
+        btnPreview = new javax.swing.JButton();
 
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         setMinimumSize(new java.awt.Dimension(686, 160));
         setPreferredSize(new java.awt.Dimension(686, 160));
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
+        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
         layout.rowHeights = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
         setLayout(layout);
 
@@ -126,39 +127,49 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         add(lblCreatedAtValue, gridBagConstraints);
 
+        btnStartSession.setBackground(new java.awt.Color(204, 255, 204));
         btnStartSession.setText("Šalji skupni e-mail");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         add(btnStartSession, gridBagConstraints);
 
         btnDelete.setBackground(new java.awt.Color(255, 0, 0));
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Obriši sesiju");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
+        gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(btnDelete, gridBagConstraints);
 
         btnUpdate.setText("Ažuriraj sesiju");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
+        gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(btnUpdate, gridBagConstraints);
 
         btnReports.setText("Otvori izvješća");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 24;
+        gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(btnReports, gridBagConstraints);
+
+        btnPreview.setText("Prikaži informacije");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 16;
+        gridBagConstraints.gridy = 2;
+        add(btnPreview, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnPreview;
     private javax.swing.JButton btnReports;
     private javax.swing.JButton btnStartSession;
     private javax.swing.JButton btnUpdate;
@@ -220,6 +231,13 @@ public class SessionContainerPanel extends javax.swing.JPanel {
                 showBulkMailSessionReports();
             }
         });
+        
+        btnPreview.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showBulkMailSessionInfo();
+            }
+        });
     }
     
     private void startBulkMailSession() {
@@ -256,6 +274,10 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     }
     
     private void showBulkMailSessionReports() {
+        
+    }
+    
+    private void showBulkMailSessionInfo() {
         
     }
 }
