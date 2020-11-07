@@ -90,6 +90,8 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         btnCancel = new javax.swing.JButton();
         jcbxStudentFile = new javax.swing.JComboBox<>();
         jcbxTemplateFiles = new javax.swing.JComboBox<>();
+        lblSessionName = new javax.swing.JLabel();
+        txtSessionName = new javax.swing.JTextField();
 
         setTitle("Sesija skupnog e-maila");
         setAlwaysOnTop(true);
@@ -102,17 +104,17 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         btnDataUpload.setText("Upload podataka studenata");
         btnDataUpload.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
         getContentPane().add(btnDataUpload, gridBagConstraints);
 
         lblStudentDataFileName.setText("Datoteka studenata:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         getContentPane().add(lblStudentDataFileName, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -120,21 +122,21 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
 
         lblEmailColumn.setText("E-mail pozicija:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblEmailColumn, gridBagConstraints);
 
         jcbxEmailColumn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nije odabrano" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jcbxEmailColumn, gridBagConstraints);
 
         lblGroupIndicator.setText("Timovi:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
@@ -142,21 +144,21 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
 
         jtbtnGroupIndicator.setText("NE");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jtbtnGroupIndicator, gridBagConstraints);
 
         lblGroupColumn.setText("Stupac za tim:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblGroupColumn, gridBagConstraints);
 
         jcbxGroupColumn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nije odabrano" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jcbxGroupColumn, gridBagConstraints);
@@ -164,17 +166,17 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         btnTemplateUpload.setText("Upload predloška e-maila");
         btnTemplateUpload.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 20;
         getContentPane().add(btnTemplateUpload, gridBagConstraints);
 
         lblTemplateFileName.setText("Predložak e-maila:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 20;
         getContentPane().add(lblTemplateFileName, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -182,24 +184,24 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
 
         lblHolderStart.setText("Početak placeholdera: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 24;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblHolderStart, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 24;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(txtHolderStart, gridBagConstraints);
 
         lblHolderEnd.setText("Kraj placeholdera: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 26;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblHolderEnd, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 26;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(txtHolderEnd, gridBagConstraints);
@@ -232,7 +234,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         jPanel1.add(lblExampleHolderEnd, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 24;
         gridBagConstraints.gridheight = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -240,7 +242,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
 
         btnSave.setText("Kreiraj");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 34;
         gridBagConstraints.ipadx = 9;
         gridBagConstraints.ipady = 9;
@@ -249,7 +251,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
 
         btnCancel.setText("Odustani");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 34;
         gridBagConstraints.ipadx = 9;
         gridBagConstraints.ipady = 9;
@@ -261,7 +263,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         jcbxStudentFile.setMinimumSize(new java.awt.Dimension(300, 20));
         jcbxStudentFile.setPreferredSize(new java.awt.Dimension(300, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 4;
@@ -272,12 +274,33 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         jcbxTemplateFiles.setMinimumSize(new java.awt.Dimension(300, 20));
         jcbxTemplateFiles.setPreferredSize(new java.awt.Dimension(300, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 20;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 4;
         gridBagConstraints.ipady = 4;
         getContentPane().add(jcbxTemplateFiles, gridBagConstraints);
+
+        lblSessionName.setText("Naziv sesije:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 8;
+        gridBagConstraints.ipady = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        getContentPane().add(lblSessionName, gridBagConstraints);
+
+        txtSessionName.setToolTipText("");
+        txtSessionName.setMinimumSize(new java.awt.Dimension(300, 20));
+        txtSessionName.setPreferredSize(new java.awt.Dimension(300, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(txtSessionName, gridBagConstraints);
 
         pack();
         setLocationRelativeTo(null);
@@ -304,10 +327,12 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
     private javax.swing.JLabel lblGroupIndicator;
     private javax.swing.JLabel lblHolderEnd;
     private javax.swing.JLabel lblHolderStart;
+    private javax.swing.JLabel lblSessionName;
     private javax.swing.JLabel lblStudentDataFileName;
     private javax.swing.JLabel lblTemplateFileName;
     private javax.swing.JTextField txtHolderEnd;
     private javax.swing.JTextField txtHolderStart;
+    private javax.swing.JTextField txtSessionName;
     // End of variables declaration//GEN-END:variables
 
     private File csvFile;
@@ -328,9 +353,18 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
     public void populateValues() {
         jcbxStudentFile.setSelectedItem(FileUtils.extractFileName(new File(session.getDataFilePath())));
         jcbxTemplateFiles.setSelectedItem(FileUtils.extractFileName(new File(session.getTemplateFilePath())));
-        jcbxEmailColumn.setSelectedItem(session.getEmailColumn());
-        jcbxGroupColumn.setSelectedItem(session.getGroupColumn());
-        jtbtnGroupIndicator.setSelected(session.hasGroup());
+        if(session.getEmailColumn() != null) {
+            jcbxEmailColumn.setSelectedItem(session.getEmailColumn());
+        } else {
+            jcbxEmailColumn.setSelectedIndex(0);
+        }
+        if(session.getGroupColumn() != null) {
+            jcbxGroupColumn.setSelectedItem(session.getGroupColumn());
+        } else {
+            jcbxGroupColumn.setSelectedIndex(0);
+        }
+        handleToggleButton(session.hasGroup());
+        txtSessionName.setText(session.getName());
 
         updateHolderStart(session.getHolderStart());
         updateHolderEnd(session.getHolderEnd());
@@ -484,7 +518,8 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         FileStringComboboxModel templateFileModel = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
         
         RawSessionData sessionData = new RawSessionData();
-        sessionData.setName(null); //TODO implementirati
+        String sessionName = txtSessionName.getText() != null && !txtSessionName.getText().isEmpty() ? txtSessionName.getText() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
+        sessionData.setName(sessionName);
         sessionData.setDataFile(csvFile == null ? studentFileModel.getSelectedFileItem() : csvFile, jcbxStudentFile.getSelectedItem().toString());
         sessionData.setEmailColumn(jcbxEmailColumn.getSelectedIndex() == 0 ? null : jcbxEmailColumn.getSelectedItem().toString());
         sessionData.setGrouped(jtbtnGroupIndicator.isSelected());
