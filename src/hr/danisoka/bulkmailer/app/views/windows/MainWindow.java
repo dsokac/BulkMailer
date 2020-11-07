@@ -282,7 +282,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     
     private void removeSessionView(Session session) {
         SessionContainerPanel target = sessionItems.get(session.getId());
-        obj.jpSessionList.remove(target);
+        jpSessionList.remove(target);
+        sessionItems.remove(session.getId());
         jpSessionList.revalidate();
     }
 }
