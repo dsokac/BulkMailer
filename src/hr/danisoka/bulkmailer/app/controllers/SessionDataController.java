@@ -21,7 +21,6 @@ import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.AttemptDaoImpl;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.HolderMappingDaoImpl;
 import hr.danisoka.bulkmailer.app.models.Attempt;
-import hr.danisoka.bulkmailer.app.models.HolderMapping;
 import java.sql.SQLException;
 
 public class SessionDataController implements SessionWinContract.Controller {
