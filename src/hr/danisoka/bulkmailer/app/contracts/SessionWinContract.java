@@ -20,5 +20,6 @@ public interface SessionWinContract {
         void updateHolderStart(String value);
         void updateHolderEnd(String value);
         void sessionCreated(Session session);
+        void sessionUpdated(Session session);
     }
 }

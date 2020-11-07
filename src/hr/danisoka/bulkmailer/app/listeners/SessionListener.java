@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface SessionListener {
     void onSessionCreated(Session session);
+    void onSessionUpdated(Session session);
     void onSessionsArrived(List<Session> sessions);
 }

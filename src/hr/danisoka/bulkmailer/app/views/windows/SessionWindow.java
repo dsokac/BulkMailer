@@ -19,6 +19,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -318,6 +319,7 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
     private boolean templateUploaded = false;
     private Session session;
     private SessionWindow obj = this;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
     
     public void setController(SessionWinContract.Controller controller) {
         this.controller = controller;
@@ -329,8 +331,9 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         jcbxEmailColumn.setSelectedItem(session.getEmailColumn());
         jcbxGroupColumn.setSelectedItem(session.getGroupColumn());
         jtbtnGroupIndicator.setSelected(session.hasGroup());
-        txtHolderStart.setText(session.getHolderStart());
-        txtHolderEnd.setText(session.getHolderEnd());
+
+        updateHolderStart(session.getHolderStart());
+        updateHolderEnd(session.getHolderEnd());
     }
     
     private void connectHolderTextboxesWithPreview() {
@@ -406,22 +409,26 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         jcbxStudentFile.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
-                File csv = model.getSelectedFileItem();
-                
-                studentsDataHeaders = controller.fetchHeadersFromStudentsData(csv);
-                handleCombobox(jcbxEmailColumn, studentsDataHeaders, "Nije odabrano");
-                handleCombobox(jcbxGroupColumn, studentsDataHeaders, "Nije odabrano");
-                
-                obj.controller.analyzeStudentData(csv);
+                if(studentsDataHeaders == null || studentsDataHeaders.isEmpty()) {
+                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
+                    File csv = model.getSelectedFileItem();
+                    
+                    studentsDataHeaders = controller.fetchHeadersFromStudentsData(csv);
+                    handleCombobox(jcbxEmailColumn, studentsDataHeaders, "Nije odabrano");
+                    handleCombobox(jcbxGroupColumn, studentsDataHeaders, "Nije odabrano");
+                    
+                    obj.controller.analyzeStudentData(csv);
+                }
             }
         });
         jcbxTemplateFiles.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
-                File template = model.getSelectedFileItem();
-                obj.controller.analyzeTemplate(template);
+                if(txtHolderStart.getText().isEmpty() || txtHolderEnd.getText().isEmpty()) {
+                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+                    File template = model.getSelectedFileItem();
+                    obj.controller.analyzeTemplate(template);
+                }
             }
         });
     }
@@ -534,6 +541,16 @@ public class SessionWindow extends javax.swing.JFrame implements SessionWinContr
         JOptionPane.showMessageDialog(this, "Nova sesija za skupni e-mail je kreirana.", "Obavijest", JOptionPane.INFORMATION_MESSAGE);
         this.setVisible(false);
     }
+
+    @Override
+    public void sessionUpdated(Session session) {
+        if(listener != null) {
+            listener.onSessionUpdated(session);
+        }
+        String sessionName = session.getName() != null ? session.getName() : String.format("Sessija kreirana %s", sdf.format(session.getCreatedAt()));
+        JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno ažurirana.", sessionName), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+        this.setVisible(false);
+    }  
 
     @Override
     public void onErrorOccurred(Exception ex, String message) {

@@ -185,6 +185,11 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         lblCreatedAtValue.setText(sdf.format(session.getCreatedAt()));
     }
     
+    public void updateView(Session session) {
+        this.session = session;
+        populateView();
+    }
+    
     private void setupButtons() {
         btnStartSession.addActionListener(new ActionListener() {
             @Override

@@ -191,12 +191,21 @@ public class SessionDataController implements SessionWinContract.Controller {
             
             sessionData.setDataFile(dataFile, null);
             sessionData.setTemplateFile(templateFile, null);
-            
-            Session session = Session.convertFrom(sessionData);
+            Session newOrUpdated = null;
+            if(session == null) {
+                newOrUpdated = Session.convertFrom(sessionData);
+            } else {
+                session.updateWith(sessionData);
+                newOrUpdated = session;
+            }
             AppDatabase db = AppDatabase.getInstance();
             SessionDaoImpl dao = db.sessionDaoImpl;
-            dao.create(session);
-            view.sessionCreated(session);
+            dao.createOrUpdate(newOrUpdated);
+            if(session == null) {             
+                view.sessionCreated(newOrUpdated);
+            } else {
+                view.sessionUpdated(newOrUpdated);
+            }
 
         } catch (IOException ex) {
             Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);

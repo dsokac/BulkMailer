@@ -233,6 +233,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     public void onSessionCreated(Session session) {
         initializeSessionView(session);
     }
+    
+    @Override
+    public void onSessionUpdated(Session session) {
+        SessionContainerPanel sessionView = sessionItems.get(session.getId());
+        sessionView.updateView(session);
+        jpSessionList.revalidate();
     }
 
     @Override

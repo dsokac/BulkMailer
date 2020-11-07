@@ -240,4 +240,15 @@ public class Session {
         return session;
     }   
     
+    public void updateWith(RawSessionData sessionData) {
+        this.setName(sessionData.getName());
+        this.setDataFilePath(sessionData.getDataFile().getAbsolutePath());
+        this.setEmailColumn(sessionData.getEmailColumn());
+        this.setHasGroup(sessionData.isGrouped());
+        this.setGroupColumn(sessionData.getGroupColumn());
+        this.setTemplateFilePath(sessionData.getTemplateFile().getAbsolutePath());
+        this.setHolderStart(sessionData.getHolderStart());
+        this.setHolderEnd(sessionData.getHolderEnd());
+    }
+    
 }
