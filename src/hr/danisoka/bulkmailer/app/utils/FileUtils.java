@@ -58,4 +58,15 @@ public final class FileUtils {
         name = name.substring(0, indexOfDot);
         return name;
     }
+    
+    public static void deleteFilesRecursive(File file) {
+        if(file.isDirectory()) {
+            File[] dirContent = file.listFiles();
+            for(int i = 0; i < dirContent.length; i++) {
+                deleteFilesRecursive(dirContent[i]);
+            }
+        } else {
+            file.delete();
+        }
+    }
 }

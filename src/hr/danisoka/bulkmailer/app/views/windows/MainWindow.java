@@ -23,6 +23,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -51,6 +52,12 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
                 obj.handleSessionCreation();
             }
         });
+        jmiDeleteAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                obj.handleDeletingAll();
+            }
+        });
         int inc = 20;
         jScrollPane2.getVerticalScrollBar().setUnitIncrement(inc);
         jScrollPane2.getHorizontalScrollBar().setUnitIncrement(inc);
@@ -74,6 +81,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jmiNewSession = new javax.swing.JMenuItem();
         jmiFileChangeCreds = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jmiDeleteAll = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +115,10 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jmbMainBar.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        jmiDeleteAll.setText("Obriši sve");
+        jMenu2.add(jmiDeleteAll);
+
         jmbMainBar.add(jMenu2);
 
         setJMenuBar(jmbMainBar);
@@ -179,6 +191,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu jmFileNew;
     private javax.swing.JMenuBar jmbMainBar;
+    private javax.swing.JMenuItem jmiDeleteAll;
     private javax.swing.JMenuItem jmiFileChangeCreds;
     private javax.swing.JMenuItem jmiNewSession;
     private javax.swing.JPanel jpSessionList;
@@ -285,5 +298,22 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
         jpSessionList.remove(target);
         sessionItems.remove(session.getId());
         jpSessionList.revalidate();
+    }
+    
+    private void handleDeletingAll() {
+        if(JOptionPane.showConfirmDialog(this, "Jesi li siguran da želiš obrisati sve sesije?", "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
+            SessionDataController controller = new SessionDataController(null);
+            controller.setErrorListener(this);
+            controller.deleteAll();
+            JOptionPane.showMessageDialog(this, "Sve sesije su uspješno izbrisane.", "Obavijest", JOptionPane.INFORMATION_MESSAGE);
+            Iterator<Long> iter = sessionItems.keySet().iterator();
+            while(iter.hasNext()) {
+                Long key = iter.next();
+                SessionContainerPanel panel = sessionItems.get(key);
+                jpSessionList.remove(panel);
+                jpSessionList.revalidate();
+            }
+            sessionItems.clear();
+        }
     }
 }

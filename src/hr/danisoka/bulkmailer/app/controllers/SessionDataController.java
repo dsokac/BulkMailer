@@ -225,10 +225,12 @@ public class SessionDataController implements SessionWinContract.Controller {
         }
     }
     
-    public boolean deleteSession(Session session) {
+    public boolean deleteSession(Session session, boolean isLoop) {
         int rowAffected = 0;
         try {
-            handleDeletingFileSystem(session);
+            if(isLoop) {
+                handleDeletingFileSystem(session);
+            }
             AppDatabase db = AppDatabase.getInstance();
             SessionDaoImpl dao = db.sessionDaoImpl;
             HolderMappingDaoImpl hmDao = db.holderMappingDaoImpl;
@@ -277,6 +279,32 @@ public class SessionDataController implements SessionWinContract.Controller {
                 errorListener.onErrorOccurred(ex, ex.getMessage());
             }
         }
+    }
+    
+    public void deleteAll() {
+        try {
+            AppDatabase db = AppDatabase.getInstance();
+            SessionDaoImpl dao = db.sessionDaoImpl;
+            deleteAllFiles();
+            for(Session session : dao.queryForAll()) {
+                deleteSession(session, true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, ex.getMessage());
+            }
+        }
+    }
+    
+    public void deleteAllFiles() {
+        File csvDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.CSV_FOLDER);
+        File templateDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
+        File attemptsDir = FileUtils.getDirectory(AppConstants.AppSettings.Folders.ATTEMPT_FOLDER);
+        
+        FileUtils.deleteFilesRecursive(csvDir);
+        FileUtils.deleteFilesRecursive(templateDir);
+        FileUtils.deleteFilesRecursive(attemptsDir);
     }
     
 }

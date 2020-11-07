@@ -39,6 +39,13 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiDeleteAll">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Obri&#x161;i sve"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>

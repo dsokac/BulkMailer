@@ -246,7 +246,7 @@ public class SessionContainerPanel extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(obj, message, "Greška!", JOptionPane.ERROR_MESSAGE);
                 }
             });
-            if(controller.deleteSession(session)) {
+            if(controller.deleteSession(session, false)) {
                 JOptionPane.showMessageDialog(this, String.format("Sesija '%s' je uspješno izbrisana.", sessionName), "Obavijest", JOptionPane.INFORMATION_MESSAGE);
                 listener.onSessionDeleted(session);
             } else {
