@@ -1,7 +1,6 @@
 package hr.danisoka.bulkmailer.app.controllers;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
-import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
 import hr.danisoka.bulkmailer.app.db.AppDatabase;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
@@ -18,13 +17,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 
-public class SessionDataController implements NewSessionWinContract.Controller {
+public class SessionDataController implements SessionWinContract.Controller {
 
-    private NewSessionWinContract.View view;
+    private SessionWinContract.View view;
     private MailLoggerHandler.LoggerErrorListener errorListener;
     
-    public SessionDataController(NewSessionWinContract.View view) {
+    public SessionDataController(SessionWinContract.View view) {
         this.view = view; 
     }
     

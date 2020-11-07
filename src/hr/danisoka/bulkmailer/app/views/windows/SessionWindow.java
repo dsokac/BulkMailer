@@ -6,7 +6,6 @@
 package hr.danisoka.bulkmailer.app.views.windows;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
-import hr.danisoka.bulkmailer.app.contracts.NewSessionWinContract;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.RawSessionData;
@@ -31,12 +30,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 
 /**
  *
  * @author Danijel
  */
-public class SessionWindow extends javax.swing.JFrame implements NewSessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
+public class SessionWindow extends javax.swing.JFrame implements SessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
 
     /**
      * Creates new form NewSessionWindow
@@ -314,7 +314,7 @@ public class SessionWindow extends javax.swing.JFrame implements NewSessionWinCo
 
     private File csvFile;
     private File templateFile;
-    private NewSessionWinContract.Controller controller;
+    private SessionWinContract.Controller controller;
     private List<String> studentsDataHeaders;
     private SessionListener listener;
     private boolean dataUploaded = false;
@@ -322,7 +322,7 @@ public class SessionWindow extends javax.swing.JFrame implements NewSessionWinCo
     private Session session;
     private SessionWindow obj = this;
     
-    public void setController(NewSessionWinContract.Controller controller) {
+    public void setController(SessionWinContract.Controller controller) {
         this.controller = controller;
     }
     

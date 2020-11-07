@@ -5,7 +5,7 @@ import hr.danisoka.bulkmailer.app.models.Session;
 import java.io.File;
 import java.util.List;
 
-public interface NewSessionWinContract {
+public interface SessionWinContract {
     interface Controller {
         void storeStudentsData(File file, String newName);
         void storeTemplateData(File file, String newName);
