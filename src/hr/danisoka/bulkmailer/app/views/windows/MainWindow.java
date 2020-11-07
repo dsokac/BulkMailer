@@ -228,14 +228,15 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
 
     @Override
     public void onSessionCreated(Session session) {
-        String name = session.getName() == null ? session.getCreatedAt().toString() : session.getName();
-        System.out.println(String.format("Kreirana je sesija '%s' u %s.", name, session.getCreatedAt()));
-        System.out.println("hr.danisoka.bulkmailer.app.views.windows.MainWindow.onSessionCreated()");
+        initializeSessionView(session);
+    }
     }
 
     @Override
     public void onSessionsArrived(List<Session> sessions) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(Session session : sessions) {
+            initializeSessionView(session);
+        }
     }
     
     public void loadSessions() {
@@ -260,5 +261,14 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    
+    private void initializeSessionView(Session session) {
+        SessionContainerPanel sessionContainer = new SessionContainerPanel(session, obj);
+        sessionContainer.setVisible(true);         
+        sessionItems.put(session.getId(), sessionContainer);
+        jpSessionList.add(sessionContainer, BorderLayout.NORTH);
+        jpSessionList.add(Box.createRigidArea(new Dimension(0, 14)));
+        jpSessionList.revalidate();
+    }
     }
 }
