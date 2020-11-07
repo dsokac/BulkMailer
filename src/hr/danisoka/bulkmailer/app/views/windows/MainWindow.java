@@ -22,7 +22,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Box;
@@ -184,6 +186,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     // End of variables declaration//GEN-END:variables
 
     private MainWindow obj = this;       
+    private Map<Long, SessionContainerPanel> sessionItems = new HashMap<>();
     
     public void handleCredentials() {
         this.setEnabled(false);
