@@ -9,6 +9,7 @@ import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.views.windows.ExecuteBulkMailSession;
 import hr.danisoka.bulkmailer.app.views.windows.SessionInfoWindow;
 import hr.danisoka.bulkmailer.app.views.windows.SessionWindow;
 import java.awt.event.ActionEvent;
@@ -241,7 +242,8 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     }
     
     private void startBulkMailSession() {
-        
+        ExecuteBulkMailSession sendEmailsView = new ExecuteBulkMailSession(session);
+        sendEmailsView.setVisible(true);
     }
     
     private void updateBulkMailSession() {
