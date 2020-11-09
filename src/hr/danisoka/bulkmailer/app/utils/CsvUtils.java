@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public final class CsvUtils {
@@ -35,4 +34,19 @@ public final class CsvUtils {
         return results;
     }
     
+    public static List<List<String>> getDataAllRowFromFile(File file, String delimiter) throws FileNotFoundException, IOException {
+         List<List<String>> results = new ArrayList<>();
+         int limit = 10;
+         int row = 0;
+         List<List<String>> data = null;
+         do {             
+             data = getDataRowFromFile(file, delimiter, row, limit);
+             row = row + limit;
+             if(data != null && !data.isEmpty()) {
+                 results.addAll(data);
+             }
+         } while(data != null && !data.isEmpty());
+         
+         return results;
+    }
 }
