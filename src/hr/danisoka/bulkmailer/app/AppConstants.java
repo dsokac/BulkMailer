@@ -19,7 +19,14 @@ public final class AppConstants {
         
         public interface Files {
             String DB_FILE = Folders.DB_FOLDER + File.separator + "bulkMailer.db";
-        }                
+        }    
+        
+        public interface Mail {
+            public interface SendingMode {
+                String SEND_ALL = "Pošalji svima";
+                String SEND_TO_EMAILS = "Pošalji na e-mail adrese";
+            }
+        }
     }
     
 }
