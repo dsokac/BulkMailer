@@ -5,6 +5,7 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows.panels;
 
+import hr.danisoka.bulkmailer.app.controllers.ExecuteBulkMailSessionController;
 import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
@@ -17,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 
-public class SessionContainerPanel extends javax.swing.JPanel {
+public class SessionContainerPanel extends javax.swing.JPanel implements MailLoggerHandler.LoggerErrorListener{
 
     /**
      * Creates new form SessionContainerPanel
@@ -243,6 +244,8 @@ public class SessionContainerPanel extends javax.swing.JPanel {
     
     private void startBulkMailSession() {
         ExecuteBulkMailSession sendEmailsView = new ExecuteBulkMailSession(session);
+        ExecuteBulkMailSessionController controller = new ExecuteBulkMailSessionController(sendEmailsView, this);
+        sendEmailsView.setController(controller);
         sendEmailsView.setVisible(true);
     }
     
@@ -282,4 +285,10 @@ public class SessionContainerPanel extends javax.swing.JPanel {
         SessionInfoWindow info = new SessionInfoWindow(session);
         info.setVisible(true);
     }
+    
+    @Override
+    public void onErrorOccurred(Exception ex, String message) {
+        JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
+    }
+
 }

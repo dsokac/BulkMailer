@@ -30,14 +30,16 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
         int indexOfEmailColumn = headers.indexOf(session.getEmailColumn());
         List<List<String>> rawData = CsvUtils.getDataAllRowFromFile(csvData, ";");
         List<String> wantedGroupValues = new ArrayList<>();
-        for(List<String> row : rawData) {
-            if(!wantedGroupValues.contains(row.get(indexOfGroupColumn)) && emails.contains(row.get(indexOfEmailColumn))) {
-                wantedGroupValues.add(row.get(indexOfGroupColumn));
+        if(emails != null) {
+            for(List<String> row : rawData) {
+                if(!wantedGroupValues.contains(row.get(indexOfGroupColumn)) && emails.contains(row.get(indexOfEmailColumn))) {
+                    wantedGroupValues.add(row.get(indexOfGroupColumn));
+                }
             }
         }
         
         for(List<String> row : rawData) {
-            if(wantedGroupValues.contains(row.get(indexOfGroupColumn))) {
+            if((emails == null || (emails != null && emails.isEmpty())) || (emails !=  null && !emails.isEmpty() && wantedGroupValues.contains(row.get(indexOfGroupColumn)))) {
                 MailRecipientData existing = MailRecipientData.findByGroupingValue(data, row.get(indexOfGroupColumn));
                 if(existing == null) {
                     List<RecipientData> recipientData = new ArrayList<>();
