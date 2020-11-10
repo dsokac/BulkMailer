@@ -8,20 +8,13 @@ package hr.danisoka.bulkmailer.app.views.windows;
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
 import hr.danisoka.bulkmailer.app.models.Session;
-import hr.danisoka.bulkmailer.app.models.session.MailRecipientData;
-import hr.danisoka.bulkmailer.app.strategies.BuildingMailDataFactory;
-import hr.danisoka.bulkmailer.app.strategies.BuildingMailDataInterface;
-import hr.danisoka.bulkmailer.app.utils.StringUtils;
+import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
+
 
 public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionContract.View{
 
@@ -132,11 +125,10 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
     // End of variables declaration//GEN-END:variables
 
     private Session session;
-    private List<MailRecipientData> data;
+    private ExecuteSessionContract.Controller controller;
     
-    
-    public void setController() {
-        
+    public void setController(ExecuteSessionContract.Controller controller) {
+        this.controller = controller;
     }
     
     private void setupButtons() {
@@ -156,26 +148,22 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
     }
     
     private void handlePreviewing() {
-        mapDataToJavaObjects();
-        
+        this.controller.processPreviewing(session, jcboxSendingMode.getSelectedItem().toString(), txtEmailSpecification.getText());       
     }
     
     private void handleSending() {
-        mapDataToJavaObjects();
-        
+        this.controller.processSending(session, jcboxSendingMode.getSelectedItem().toString(), txtEmailSpecification.getText());
     }
     
-    
-    private void mapDataToJavaObjects() {
-        try {
-            if(data == null) {
-                BuildingMailDataInterface strat = BuildingMailDataFactory.getStrategy(session, StringUtils.getItemsFromString(",", txtEmailSpecification.getText()));
-                data = strat.buildMailData();            
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ExecuteBulkMailSession.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ExecuteBulkMailSession.class.getName()).log(Level.SEVERE, null, ex);
+    @Override
+    public void onBulkMailDataReady(BulkEmailData data, boolean forPreview) {
+        if(forPreview) {
+            PreviewEmailWindow emailWin = new PreviewEmailWindow(data);
+            emailWin.loadHtml();
+            emailWin.setVisible(true);
+        } else {
+            
         }
     }
+   
 }
