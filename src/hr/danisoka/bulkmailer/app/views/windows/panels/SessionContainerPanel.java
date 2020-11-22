@@ -158,6 +158,7 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
         add(btnUpdate, gridBagConstraints);
 
         btnReports.setText("Otvori izvješća");
+        btnReports.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 16;
         gridBagConstraints.gridy = 8;
