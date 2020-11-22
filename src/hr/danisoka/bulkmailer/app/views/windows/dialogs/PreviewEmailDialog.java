@@ -18,7 +18,6 @@ public class PreviewEmailDialog extends javax.swing.JDialog {
         jpWebViewContainer.add(jfxPanel);
         jfxPanel.setVisible(true);
         jpWebViewContainer.revalidate();
-        
         this.data = data;
         setupButtons();
         setupPages();
@@ -131,6 +130,7 @@ public class PreviewEmailDialog extends javax.swing.JDialog {
     private JFXPanel jfxPanel;
     
     public void loadHtml() {
+        Platform.setImplicitExit(false);
         // Creation of scene and future interactions with JFXPanel
         // should take place on the JavaFX Application Thread
         Platform.runLater(() -> {
@@ -208,5 +208,10 @@ public class PreviewEmailDialog extends javax.swing.JDialog {
             btnNext.setEnabled(false);
             btnLast.setEnabled(false);
         }
-    }
+        
+        if(current == 1 && data.getEmailItems().size() == current) {
+            btnNext.setEnabled(false);
+            btnLast.setEnabled(false);
+        } 
+    }        
 }

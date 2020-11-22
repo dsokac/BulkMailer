@@ -47,6 +47,8 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
     
     @Override
     public void processSending(Session session, String mode, String specifiedEmails) {
+        this.data = null;
+        this.bulkEmailData = null;
         this.session = session;   
         prepareDataForSending(specifiedEmails);
         this.view.onBulkMailDataReady(bulkEmailData, false);
@@ -54,6 +56,8 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
     
     @Override
     public void processPreviewing(Session session, String mode, String specifiedEmails) {
+        this.data = null;
+        this.bulkEmailData = null;
         this.session = session;
         prepareDataForSending(specifiedEmails);
         this.view.onBulkMailDataReady(bulkEmailData, true);

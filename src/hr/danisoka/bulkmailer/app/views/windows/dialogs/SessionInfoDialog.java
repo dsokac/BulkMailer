@@ -43,6 +43,8 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblAttemptsCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(670, 300));
+        setPreferredSize(new java.awt.Dimension(670, 300));
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
         layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0};
         layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
@@ -198,6 +200,7 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         getContentPane().add(lblAttemptsCount, gridBagConstraints);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

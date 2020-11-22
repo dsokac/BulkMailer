@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View {
 
@@ -27,6 +29,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
                 if(selectedItem.equals(AppConstants.AppSettings.Mail.SendingMode.SEND_ALL)) {
                     txtEmailSpecification.setText(null);
                 }
+                bulkEmailData = null;
             }
         });
     }
@@ -123,6 +126,10 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private Session session;
     private ExecuteSessionContract.Controller controller;
     private Frame parent;
+    private BulkEmailData bulkEmailData = null;
+    private ExecuteBulkMailSessionDialog obj = this;
+    private PreviewEmailDialog previewEmailsDialog;
+    private String previousMailSpecification = null;
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
@@ -145,22 +152,56 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     }
     
     private void handlePreviewing() {
-        this.controller.processPreviewing(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());       
+        if(previousMailSpecification != null && !previousMailSpecification.equals(txtEmailSpecification.getText())) {
+            this.bulkEmailData = null;
+        }
+        if(bulkEmailData == null) {
+            this.previousMailSpecification = txtEmailSpecification.getText();
+            this.controller.processPreviewing(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());       
+        } else {
+            previewEmails(bulkEmailData);
+        }
     }
     
     private void handleSending() {
-        this.controller.processSending(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());
+        if(previousMailSpecification != null && !previousMailSpecification.equals(txtEmailSpecification.getText())) {
+            this.bulkEmailData = null;
+        }
+        if(bulkEmailData == null) {
+            this.previousMailSpecification = txtEmailSpecification.getText();
+            this.controller.processSending(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());
+        } else {
+            sendEmails(bulkEmailData);
+        }
     }
     
     @Override
     public void onBulkMailDataReady(BulkEmailData data, boolean forPreview) {
+        this.bulkEmailData = data;
         if(forPreview) {
-            PreviewEmailDialog previewEmailsDialog = new PreviewEmailDialog(parent, true, data);
-            previewEmailsDialog.loadHtml();
-            previewEmailsDialog.setVisible(true);
+            previewEmails(data);
         } else {
-            
+            sendEmails(data);
         }
+    }
+    
+    private void previewEmails(BulkEmailData data) {
+        previewEmailsDialog = new PreviewEmailDialog(parent, true, data);
+        previewEmailsDialog.loadHtml();
+        previewEmailsDialog.setVisible(true);
+        previewEmailsDialog.revalidate();
+        previewEmailsDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                previewEmailsDialog.dispose();
+                previewEmailsDialog = null;
+            }
+            
+        });
+    }
+    
+    private void sendEmails(BulkEmailData data) {
+        
     }
     
 }
