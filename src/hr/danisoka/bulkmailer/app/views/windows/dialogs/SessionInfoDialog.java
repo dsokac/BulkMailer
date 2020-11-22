@@ -43,24 +43,24 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblAttemptsCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(670, 300));
-        setPreferredSize(new java.awt.Dimension(670, 300));
+        setMinimumSize(new java.awt.Dimension(700, 300));
+        setPreferredSize(new java.awt.Dimension(900, 350));
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0};
-        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
+        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
+        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
         lblSessionName.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblSessionName.setText("jLabel1");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
         getContentPane().add(lblSessionName, gridBagConstraints);
 
         lblCreatedAt.setText("Kreirano: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblCreatedAt, gridBagConstraints);
 
@@ -68,14 +68,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblCreatedAtValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblCreatedAtValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 8;
         getContentPane().add(lblCreatedAtValue, gridBagConstraints);
 
         lblStudentDataFile.setText("Datoteka studenata: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblStudentDataFile, gridBagConstraints);
 
@@ -83,20 +83,20 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblStudentDataFilePath.setMinimumSize(new java.awt.Dimension(500, 14));
         lblStudentDataFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 10;
         getContentPane().add(lblStudentDataFilePath, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
 
         lblEmailColumn.setText("Stupac za e-mail: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblEmailColumn, gridBagConstraints);
 
@@ -104,14 +104,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblEmailColumnValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblEmailColumnValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 12;
         getContentPane().add(lblEmailColumnValue, gridBagConstraints);
 
         lblGroupIndicator.setText("Timsko slanje: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblGroupIndicator, gridBagConstraints);
 
@@ -119,14 +119,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblGroupIndicatorValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblGroupIndicatorValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 14;
         getContentPane().add(lblGroupIndicatorValue, gridBagConstraints);
 
         lblGroupColumn.setText("Stupac za tim: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblGroupColumn, gridBagConstraints);
 
@@ -134,14 +134,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblGroupColumnValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblGroupColumnValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 16;
         getContentPane().add(lblGroupColumnValue, gridBagConstraints);
 
         lblTemplateFile.setText("Datoteka predloška e-maila:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblTemplateFile, gridBagConstraints);
 
@@ -149,14 +149,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblTemplateFilePath.setMinimumSize(new java.awt.Dimension(500, 14));
         lblTemplateFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 18;
         getContentPane().add(lblTemplateFilePath, gridBagConstraints);
 
         lblHolderStart.setText("Početak placeholdera: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblHolderStart, gridBagConstraints);
 
@@ -164,15 +164,15 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblHolderStartValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblHolderStartValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 20;
         getContentPane().add(lblHolderStartValue, gridBagConstraints);
 
         lblHolderEnd.setText("Kraj placeholdera: ");
         lblHolderEnd.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 22;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblHolderEnd, gridBagConstraints);
 
@@ -180,14 +180,14 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblHolderEndValue.setMinimumSize(new java.awt.Dimension(500, 14));
         lblHolderEndValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 22;
         getContentPane().add(lblHolderEndValue, gridBagConstraints);
 
         lblAttempts.setText("Broj slanja: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 24;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblAttempts, gridBagConstraints);
 
@@ -195,8 +195,8 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblAttemptsCount.setMinimumSize(new java.awt.Dimension(500, 14));
         lblAttemptsCount.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 24;
         getContentPane().add(lblAttemptsCount, gridBagConstraints);
 
         pack();
