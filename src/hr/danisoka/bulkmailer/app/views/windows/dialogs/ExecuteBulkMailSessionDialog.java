@@ -1,32 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package hr.danisoka.bulkmailer.app.views.windows;
+package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.JDialog;
 
+public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View {
 
-public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionContract.View{
-
-    /**
-     * Creates new form ExecuteBulkMailSession
-     */
-    public ExecuteBulkMailSession(Session session) {
+    public ExecuteBulkMailSessionDialog(java.awt.Frame parent, boolean modal, Session session) {
+        super(parent, modal);
         initComponents();
         setupButtons();
+        this.parent = parent;
         this.session = session;
         this.setTitle(this.session.getName());
-        this.jcboxSendingMode.addItemListener(new ItemListener() {
+        this.jcboxEmailMode.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 String selectedItem = e.getItem().toString();
@@ -36,7 +29,6 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
                 }
             }
         });
-        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
@@ -48,61 +40,65 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        lblMessagingMode = new javax.swing.JLabel();
-        jcboxSendingMode = new javax.swing.JComboBox<>();
-        lblMailSpecification = new javax.swing.JLabel();
+        lblEmailMode = new javax.swing.JLabel();
+        jcboxEmailMode = new javax.swing.JComboBox<>();
+        lblEmailSpecification = new javax.swing.JLabel();
         txtEmailSpecification = new javax.swing.JTextField();
         btnPreviewAll = new javax.swing.JButton();
         btnSend = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setModal(true);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0};
+        layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
-        lblMessagingMode.setText("Način slanja e-maila:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(lblMessagingMode, gridBagConstraints);
-
-        jcboxSendingMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pošalji svima", "Pošalji na e-mail adrese" }));
+        lblEmailMode.setText("Način slanja e-mail pošte:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(jcboxSendingMode, gridBagConstraints);
-
-        lblMailSpecification.setText("E-mail adrese (više e-maila odvojiti zarezima):");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(lblMailSpecification, gridBagConstraints);
+        getContentPane().add(lblEmailMode, gridBagConstraints);
+
+        jcboxEmailMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pošalji svima", "Pošalji na e-mail adrese" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(jcboxEmailMode, gridBagConstraints);
+
+        lblEmailSpecification.setText("E-mail adrese (više e-mail adresa odvojiti zarezima): ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        getContentPane().add(lblEmailSpecification, gridBagConstraints);
 
         txtEmailSpecification.setEnabled(false);
         txtEmailSpecification.setMinimumSize(new java.awt.Dimension(300, 20));
         txtEmailSpecification.setPreferredSize(new java.awt.Dimension(300, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.ipady = 5;
+        gridBagConstraints.ipadx = 9;
+        gridBagConstraints.ipady = 12;
         getContentPane().add(txtEmailSpecification, gridBagConstraints);
 
-        btnPreviewAll.setText("Preview All");
+        btnPreviewAll.setText("Pregledaj sve");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 2;
+        gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(btnPreviewAll, gridBagConstraints);
 
         btnSend.setText("Pošalji");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
@@ -118,14 +114,15 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPreviewAll;
     private javax.swing.JButton btnSend;
-    private javax.swing.JComboBox<String> jcboxSendingMode;
-    private javax.swing.JLabel lblMailSpecification;
-    private javax.swing.JLabel lblMessagingMode;
+    private javax.swing.JComboBox<String> jcboxEmailMode;
+    private javax.swing.JLabel lblEmailMode;
+    private javax.swing.JLabel lblEmailSpecification;
     private javax.swing.JTextField txtEmailSpecification;
     // End of variables declaration//GEN-END:variables
 
     private Session session;
     private ExecuteSessionContract.Controller controller;
+    private Frame parent;
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
@@ -148,22 +145,22 @@ public class ExecuteBulkMailSession extends JDialog implements ExecuteSessionCon
     }
     
     private void handlePreviewing() {
-        this.controller.processPreviewing(session, jcboxSendingMode.getSelectedItem().toString(), txtEmailSpecification.getText());       
+        this.controller.processPreviewing(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());       
     }
     
     private void handleSending() {
-        this.controller.processSending(session, jcboxSendingMode.getSelectedItem().toString(), txtEmailSpecification.getText());
+        this.controller.processSending(session, jcboxEmailMode.getSelectedItem().toString(), txtEmailSpecification.getText());
     }
     
     @Override
     public void onBulkMailDataReady(BulkEmailData data, boolean forPreview) {
         if(forPreview) {
-            PreviewEmailWindow emailWin = new PreviewEmailWindow(data);
-            emailWin.loadHtml();
-            emailWin.setVisible(true);
+            PreviewEmailDialog previewEmailsDialog = new PreviewEmailDialog(parent, true, data);
+            previewEmailsDialog.loadHtml();
+            previewEmailsDialog.setVisible(true);
         } else {
             
         }
     }
-   
+    
 }

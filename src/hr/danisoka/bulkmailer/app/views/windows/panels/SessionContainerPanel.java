@@ -10,12 +10,13 @@ import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
-import hr.danisoka.bulkmailer.app.views.windows.ExecuteBulkMailSession;
-import hr.danisoka.bulkmailer.app.views.windows.SessionInfoWindow;
-import hr.danisoka.bulkmailer.app.views.windows.SessionWindow;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.ExecuteBulkMailSessionDialog;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionDialog;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionInfoDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class SessionContainerPanel extends javax.swing.JPanel implements MailLoggerHandler.LoggerErrorListener{
@@ -23,10 +24,11 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     /**
      * Creates new form SessionContainerPanel
      */
-    public SessionContainerPanel(Session session, SessionListener listener) {
+    public SessionContainerPanel(JFrame parent, Session session, SessionListener listener) {
         initComponents();
         this.listener = listener;
-        this.session = session;        
+        this.session = session;
+        this.parent = parent;
         populateView();
         setupButtons();
     }
@@ -190,6 +192,7 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     private Session session;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
     private SessionListener listener;
+    private JFrame parent;
     
     private void populateView() {
         lblSessionName.setText(session.getName());
@@ -243,14 +246,14 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     }
     
     private void startBulkMailSession() {
-        ExecuteBulkMailSession sendEmailsView = new ExecuteBulkMailSession(session);
-        ExecuteBulkMailSessionController controller = new ExecuteBulkMailSessionController(sendEmailsView, this);
-        sendEmailsView.setController(controller);
-        sendEmailsView.setVisible(true);
+        ExecuteBulkMailSessionDialog sendEmailsDialog = new ExecuteBulkMailSessionDialog(parent, true, session);
+        ExecuteBulkMailSessionController controller = new ExecuteBulkMailSessionController(sendEmailsDialog, this);
+        sendEmailsDialog.setController(controller);
+        sendEmailsDialog.setVisible(true);
     }
     
     private void updateBulkMailSession() {
-        SessionWindow sessionWin = new SessionWindow(session, listener);
+        SessionDialog sessionWin = new SessionDialog(parent, true, session, listener);
         SessionDataController controller = new SessionDataController(sessionWin);
         controller.setErrorListener(sessionWin);
         sessionWin.setController(controller);
@@ -282,7 +285,7 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     }
     
     private void showBulkMailSessionInfo() {        
-        SessionInfoWindow info = new SessionInfoWindow(session);
+        SessionInfoDialog info = new SessionInfoDialog(parent, true, session);
         info.setVisible(true);
     }
     

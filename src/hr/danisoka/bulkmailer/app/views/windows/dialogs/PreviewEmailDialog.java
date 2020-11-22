@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package hr.danisoka.bulkmailer.app.views.windows;
+package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
 import java.awt.event.ActionEvent;
@@ -12,18 +7,11 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebView;
-import javax.swing.JDialog;
 
-/**
- *
- * @author Danijel
- */
-public class PreviewEmailWindow extends JDialog {
+public class PreviewEmailDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form PreviewEmailWindow
-     */
-    public PreviewEmailWindow(BulkEmailData data) {
+    public PreviewEmailDialog(java.awt.Frame parent, boolean modal, BulkEmailData data) {
+        super(parent, modal);
         initComponents();
         
         jfxPanel = new JFXPanel();
@@ -32,7 +20,6 @@ public class PreviewEmailWindow extends JDialog {
         jpWebViewContainer.revalidate();
         
         this.data = data;
-        setModalityType(ModalityType.APPLICATION_MODAL);
         setupButtons();
         setupPages();
     }
@@ -50,102 +37,92 @@ public class PreviewEmailWindow extends JDialog {
         btnFirst = new javax.swing.JButton();
         btnPrevious = new javax.swing.JButton();
         lblCurrent = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblSlash = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         btnNext = new javax.swing.JButton();
         btnLast = new javax.swing.JButton();
         jpWebViewContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1000, 700));
+        setModal(true);
         setPreferredSize(new java.awt.Dimension(1000, 700));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
+        jpControlsContainer.setMinimumSize(new java.awt.Dimension(1000, 50));
+        jpControlsContainer.setPreferredSize(new java.awt.Dimension(1000, 50));
         java.awt.GridBagLayout jpControlsContainerLayout = new java.awt.GridBagLayout();
-        jpControlsContainerLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        jpControlsContainerLayout.rowHeights = new int[] {0};
+        jpControlsContainerLayout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        jpControlsContainerLayout.rowHeights = new int[] {0, 10, 0, 10, 0};
         jpControlsContainer.setLayout(jpControlsContainerLayout);
 
         btnFirst.setText("Prvi");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
         jpControlsContainer.add(btnFirst, gridBagConstraints);
 
         btnPrevious.setText("Prethodni");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
         jpControlsContainer.add(btnPrevious, gridBagConstraints);
 
         lblCurrent.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 6;
         gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jpControlsContainer.add(lblCurrent, gridBagConstraints);
 
-        jLabel1.setText("/");
+        lblSlash.setText("/");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
-        jpControlsContainer.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 2;
+        jpControlsContainer.add(lblSlash, gridBagConstraints);
 
         lblTotal.setText("##");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
         jpControlsContainer.add(lblTotal, gridBagConstraints);
 
         btnNext.setText("Sljedeći");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 2;
         jpControlsContainer.add(btnNext, gridBagConstraints);
 
         btnLast.setText("Zadnji");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 20;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 22;
+        gridBagConstraints.gridy = 2;
         jpControlsContainer.add(btnLast, gridBagConstraints);
 
-        jpWebViewContainer.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jpControlsContainer);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpWebViewContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jpControlsContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jpControlsContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jpWebViewContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
-        );
+        jpWebViewContainer.setLayout(new javax.swing.BoxLayout(jpWebViewContainer, javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().add(jpWebViewContainer);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFirst;
     private javax.swing.JButton btnLast;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrevious;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jpControlsContainer;
     private javax.swing.JPanel jpWebViewContainer;
     private javax.swing.JLabel lblCurrent;
+    private javax.swing.JLabel lblSlash;
     private javax.swing.JLabel lblTotal;
     // End of variables declaration//GEN-END:variables
 

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package hr.danisoka.bulkmailer.app.views.windows;
+package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
+import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.RawSessionData;
@@ -20,7 +16,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.ComboBoxModel;
@@ -28,27 +23,20 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 
-/**
- *
- * @author Danijel
- */
-public class SessionWindow extends javax.swing.JDialog implements SessionWinContract.View, MailLoggerHandler.LoggerErrorListener {
+public class SessionDialog extends javax.swing.JDialog implements SessionWinContract.View, MailLoggerHandler.LoggerErrorListener{
 
-    /**
-     * Creates new form NewSessionWindow
-     */
-    public SessionWindow(SessionListener listener) {
+    public SessionDialog(java.awt.Frame parent, boolean modal, SessionListener listener) {
+        super(parent, modal);
         initComponents();
+        
         connectHolderTextboxesWithPreview();
         setupButtons();
         setupComboboxes();
         this.listener = listener;
-        setModalityType(ModalityType.APPLICATION_MODAL);
     }
     
-    public SessionWindow(Session session, SessionListener listener) {
+     public SessionDialog(java.awt.Frame parent, boolean modal, Session session, SessionListener listener) {
         initComponents();
         this.session = session;
         connectHolderTextboxesWithPreview();
@@ -56,7 +44,6 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
         setupComboboxes();
         this.listener = listener;        
         btnSave.setText("Spremi");
-        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
@@ -68,241 +55,241 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnDataUpload = new javax.swing.JButton();
-        lblStudentDataFileName = new javax.swing.JLabel();
+        lblSessionName = new javax.swing.JLabel();
+        txtSessionName = new javax.swing.JTextField();
+        btnUploadData = new javax.swing.JButton();
+        lblStudentData = new javax.swing.JLabel();
+        jcbxStudentData = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         lblEmailColumn = new javax.swing.JLabel();
         jcbxEmailColumn = new javax.swing.JComboBox<>();
-        lblGroupIndicator = new javax.swing.JLabel();
-        jtbtnGroupIndicator = new javax.swing.JToggleButton();
         lblGroupColumn = new javax.swing.JLabel();
         jcbxGroupColumn = new javax.swing.JComboBox<>();
-        btnTemplateUpload = new javax.swing.JButton();
-        lblTemplateFileName = new javax.swing.JLabel();
+        lblGroupIndicator = new javax.swing.JLabel();
+        jtbtnGroupIndicator = new javax.swing.JToggleButton();
         jSeparator2 = new javax.swing.JSeparator();
-        lblHolderStart = new javax.swing.JLabel();
+        btnTemplateUpload = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jcbxTemplateFile = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         txtHolderStart = new javax.swing.JTextField();
         lblHolderEnd = new javax.swing.JLabel();
         txtHolderEnd = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
-        lblExampleHolderStart = new javax.swing.JLabel();
-        lblExampleHolderName = new javax.swing.JLabel();
-        lblExampleHolderEnd = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        jcbxStudentFile = new javax.swing.JComboBox<>();
-        jcbxTemplateFiles = new javax.swing.JComboBox<>();
-        lblSessionName = new javax.swing.JLabel();
-        txtSessionName = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        lblExample = new javax.swing.JLabel();
+        lblHolderStartExample = new javax.swing.JLabel();
+        lblHolderEndExample = new javax.swing.JLabel();
 
-        setTitle("Sesija skupnog e-maila");
-        setAlwaysOnTop(true);
-        setType(java.awt.Window.Type.POPUP);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0, 9, 0};
-        layout.rowHeights = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
-        btnDataUpload.setText("Upload podataka studenata");
-        btnDataUpload.setToolTipText("");
+        lblSessionName.setText("Naziv sesije:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
-        getContentPane().add(btnDataUpload, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        getContentPane().add(lblSessionName, gridBagConstraints);
 
-        lblStudentDataFileName.setText("Datoteka studenata:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
-        getContentPane().add(lblStudentDataFileName, gridBagConstraints);
+        txtSessionName.setMinimumSize(new java.awt.Dimension(300, 20));
+        txtSessionName.setPreferredSize(new java.awt.Dimension(300, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipady = 6;
+        getContentPane().add(txtSessionName, gridBagConstraints);
+
+        btnUploadData.setText("Prijenos podataka studenata");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        getContentPane().add(btnUploadData, gridBagConstraints);
+
+        lblStudentData.setText("Datoteka studenata: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        getContentPane().add(lblStudentData, gridBagConstraints);
+
+        jcbxStudentData.setEditable(true);
+        jcbxStudentData.setMinimumSize(new java.awt.Dimension(300, 20));
+        jcbxStudentData.setPreferredSize(new java.awt.Dimension(300, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(jcbxStudentData, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
 
-        lblEmailColumn.setText("E-mail pozicija:");
+        lblEmailColumn.setText("Stupac za e-mail: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblEmailColumn, gridBagConstraints);
 
-        jcbxEmailColumn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nije odabrano" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jcbxEmailColumn, gridBagConstraints);
-
-        lblGroupIndicator.setText("Timovi:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 3;
+        getContentPane().add(jcbxEmailColumn, gridBagConstraints);
+
+        lblGroupColumn.setText("Stupac za tim: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        getContentPane().add(lblGroupColumn, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 3;
+        getContentPane().add(jcbxGroupColumn, gridBagConstraints);
+
+        lblGroupIndicator.setText("Timovi: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblGroupIndicator, gridBagConstraints);
 
         jtbtnGroupIndicator.setText("NE");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 3;
         getContentPane().add(jtbtnGroupIndicator, gridBagConstraints);
-
-        lblGroupColumn.setText("Stupac za tim:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(lblGroupColumn, gridBagConstraints);
-
-        jcbxGroupColumn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nije odabrano" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jcbxGroupColumn, gridBagConstraints);
-
-        btnTemplateUpload.setText("Upload predloška e-maila");
-        btnTemplateUpload.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 20;
-        getContentPane().add(btnTemplateUpload, gridBagConstraints);
-
-        lblTemplateFileName.setText("Predložak e-maila:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 20;
-        getContentPane().add(lblTemplateFileName, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator2, gridBagConstraints);
 
-        lblHolderStart.setText("Početak placeholdera: ");
+        btnTemplateUpload.setText("Prijenos predloška e-maila");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 18;
+        getContentPane().add(btnTemplateUpload, gridBagConstraints);
+
+        jLabel1.setText("Predložak e-maila: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 24;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(lblHolderStart, gridBagConstraints);
+        gridBagConstraints.gridy = 18;
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jcbxTemplateFile.setEditable(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 24;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(jcbxTemplateFile, gridBagConstraints);
+
+        jLabel2.setText("Početak placeholdera: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        getContentPane().add(jLabel2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
         getContentPane().add(txtHolderStart, gridBagConstraints);
 
         lblHolderEnd.setText("Kraj placeholdera: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 26;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 24;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(lblHolderEnd, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 26;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(txtHolderEnd, gridBagConstraints);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), java.awt.Color.darkGray));
-        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
-        jPanel1Layout.columnWidths = new int[] {0, 4, 0, 4, 0};
-        jPanel1Layout.rowHeights = new int[] {0};
-        jPanel1.setLayout(jPanel1Layout);
-
-        lblExampleHolderStart.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblExampleHolderStart.setText("@@");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        jPanel1.add(lblExampleHolderStart, gridBagConstraints);
-
-        lblExampleHolderName.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        lblExampleHolderName.setText("Poduzece");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        jPanel1.add(lblExampleHolderName, gridBagConstraints);
-
-        lblExampleHolderEnd.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lblExampleHolderEnd.setText("@@");
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        jPanel1.add(lblExampleHolderEnd, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 24;
-        gridBagConstraints.gridheight = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(txtHolderEnd, gridBagConstraints);
 
         btnSave.setText("Kreiraj");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 34;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.ipady = 9;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(btnSave, gridBagConstraints);
 
         btnCancel.setText("Odustani");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 34;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.ipady = 9;
+        gridBagConstraints.gridx = 14;
+        gridBagConstraints.gridy = 28;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(btnCancel, gridBagConstraints);
 
-        jcbxStudentFile.setEditable(true);
-        jcbxStudentFile.setToolTipText("");
-        jcbxStudentFile.setMinimumSize(new java.awt.Dimension(300, 20));
-        jcbxStudentFile.setPreferredSize(new java.awt.Dimension(300, 20));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
-        getContentPane().add(jcbxStudentFile, gridBagConstraints);
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
+        jPanel1Layout.columnWidths = new int[] {0, 5, 0, 5, 0};
+        jPanel1Layout.rowHeights = new int[] {0};
+        jPanel1.setLayout(jPanel1Layout);
 
-        jcbxTemplateFiles.setEditable(true);
-        jcbxTemplateFiles.setMinimumSize(new java.awt.Dimension(300, 20));
-        jcbxTemplateFiles.setPreferredSize(new java.awt.Dimension(300, 20));
+        lblExample.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblExample.setText("Poduzeće");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
-        getContentPane().add(jcbxTemplateFiles, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(lblExample, gridBagConstraints);
 
-        lblSessionName.setText("Naziv sesije:");
+        lblHolderStartExample.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblHolderStartExample.setText("@@");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(lblHolderStartExample, gridBagConstraints);
+
+        lblHolderEndExample.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblHolderEndExample.setText("@@");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 8;
-        gridBagConstraints.ipady = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        getContentPane().add(lblSessionName, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(lblHolderEndExample, gridBagConstraints);
 
-        txtSessionName.setToolTipText("");
-        txtSessionName.setMinimumSize(new java.awt.Dimension(300, 20));
-        txtSessionName.setPreferredSize(new java.awt.Dimension(300, 20));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
-        getContentPane().add(txtSessionName, gridBagConstraints);
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
         setLocationRelativeTo(null);
@@ -310,28 +297,28 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnDataUpload;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnTemplateUpload;
+    private javax.swing.JButton btnUploadData;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JComboBox<String> jcbxEmailColumn;
     private javax.swing.JComboBox<String> jcbxGroupColumn;
-    private javax.swing.JComboBox<String> jcbxStudentFile;
-    private javax.swing.JComboBox<String> jcbxTemplateFiles;
+    private javax.swing.JComboBox<String> jcbxStudentData;
+    private javax.swing.JComboBox<String> jcbxTemplateFile;
     private javax.swing.JToggleButton jtbtnGroupIndicator;
     private javax.swing.JLabel lblEmailColumn;
-    private javax.swing.JLabel lblExampleHolderEnd;
-    private javax.swing.JLabel lblExampleHolderName;
-    private javax.swing.JLabel lblExampleHolderStart;
+    private javax.swing.JLabel lblExample;
     private javax.swing.JLabel lblGroupColumn;
     private javax.swing.JLabel lblGroupIndicator;
     private javax.swing.JLabel lblHolderEnd;
-    private javax.swing.JLabel lblHolderStart;
+    private javax.swing.JLabel lblHolderEndExample;
+    private javax.swing.JLabel lblHolderStartExample;
     private javax.swing.JLabel lblSessionName;
-    private javax.swing.JLabel lblStudentDataFileName;
-    private javax.swing.JLabel lblTemplateFileName;
+    private javax.swing.JLabel lblStudentData;
     private javax.swing.JTextField txtHolderEnd;
     private javax.swing.JTextField txtHolderStart;
     private javax.swing.JTextField txtSessionName;
@@ -345,7 +332,7 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     private boolean dataUploaded = false;
     private boolean templateUploaded = false;
     private Session session;
-    private SessionWindow obj = this;
+    private SessionDialog obj = this;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
     
     public void setController(SessionWinContract.Controller controller) {
@@ -353,8 +340,8 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     }
     
     public void populateValues() {
-        jcbxStudentFile.setSelectedItem(FileUtils.extractFileName(new File(session.getDataFilePath())));
-        jcbxTemplateFiles.setSelectedItem(FileUtils.extractFileName(new File(session.getTemplateFilePath())));
+        jcbxStudentData.setSelectedItem(FileUtils.extractFileName(new File(session.getDataFilePath())));
+        jcbxTemplateFile.setSelectedItem(FileUtils.extractFileName(new File(session.getTemplateFilePath())));
         if(session.getEmailColumn() != null) {
             jcbxEmailColumn.setSelectedItem(session.getEmailColumn());
         } else {
@@ -373,14 +360,14 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     }
     
     private void connectHolderTextboxesWithPreview() {
-        lblExampleHolderStart.setText(txtHolderStart.getText());
-        lblExampleHolderEnd.setText(txtHolderEnd.getText());
+        lblHolderStartExample.setText(txtHolderStart.getText());
+        lblHolderEndExample.setText(txtHolderEnd.getText());
         
         txtHolderStart.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String value = txtHolderStart.getText();
-                lblExampleHolderStart.setText(value);
+                lblHolderStartExample.setText(value);
             }            
         });
         
@@ -388,7 +375,7 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
             @Override
             public void keyReleased(KeyEvent e) {
                 String value = txtHolderEnd.getText();
-                lblExampleHolderEnd.setText(value);
+                lblHolderEndExample.setText(value);
             }
         });
     }
@@ -410,7 +397,7 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
             }
         });
         
-        btnDataUpload.addActionListener(new ActionListener() {
+        btnUploadData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleCsvDataUpload();
@@ -440,13 +427,13 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     }
     
     private void setupComboboxes() {
-        populateCombobox(jcbxStudentFile, AppConstants.AppSettings.Folders.CSV_FOLDER);
-        populateCombobox(jcbxTemplateFiles, AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
-        jcbxStudentFile.addItemListener(new ItemListener() {
+        populateCombobox(jcbxStudentData, AppConstants.AppSettings.Folders.CSV_FOLDER);
+        populateCombobox(jcbxTemplateFile, AppConstants.AppSettings.Folders.TEMPLATES_FOLDER);
+        jcbxStudentData.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if(studentsDataHeaders == null || studentsDataHeaders.isEmpty()) {
-                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
+                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentData.getModel();
                     File csv = model.getSelectedFileItem();
                     
                     studentsDataHeaders = controller.fetchHeadersFromStudentsData(csv);
@@ -457,11 +444,11 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
                 }
             }
         });
-        jcbxTemplateFiles.addItemListener(new ItemListener() {
+        jcbxTemplateFile.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if(txtHolderStart.getText().isEmpty() || txtHolderEnd.getText().isEmpty()) {
-                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+                    FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFile.getModel();
                     File template = model.getSelectedFileItem();
                     obj.controller.analyzeTemplate(template);
                 }
@@ -478,10 +465,10 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
         if(outcome == JFileChooser.APPROVE_OPTION) {
             csvFile = chooser.getSelectedFile();
             
-            FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentFile.getModel();
+            FileStringComboboxModel model = (FileStringComboboxModel)jcbxStudentData.getModel();
             model.insertFileItemAt(csvFile, 0);
-            jcbxStudentFile.setModel(model);
-            jcbxStudentFile.setSelectedIndex(0);
+            jcbxStudentData.setModel(model);
+            jcbxStudentData.setSelectedIndex(0);
             
             studentsDataHeaders = controller.fetchHeadersFromStudentsData(csvFile);
             handleCombobox(jcbxEmailColumn, studentsDataHeaders, "Nije odabrano");
@@ -501,10 +488,10 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
         if(outcome == JFileChooser.APPROVE_OPTION) {
             templateFile = chooser.getSelectedFile();
             
-            FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+            FileStringComboboxModel model = (FileStringComboboxModel)jcbxTemplateFile.getModel();
             model.insertFileItemAt(templateFile, 0);
-            jcbxTemplateFiles.setModel(model);
-            jcbxTemplateFiles.setSelectedIndex(0);
+            jcbxTemplateFile.setModel(model);
+            jcbxTemplateFile.setSelectedIndex(0);
             
             controller.analyzeTemplate(templateFile);
             templateUploaded = true;
@@ -516,17 +503,17 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     }
     
     private void handleSaveDialog() {
-        FileStringComboboxModel studentFileModel = (FileStringComboboxModel)jcbxStudentFile.getModel();
-        FileStringComboboxModel templateFileModel = (FileStringComboboxModel)jcbxTemplateFiles.getModel();
+        FileStringComboboxModel studentFileModel = (FileStringComboboxModel)jcbxStudentData.getModel();
+        FileStringComboboxModel templateFileModel = (FileStringComboboxModel)jcbxTemplateFile.getModel();
         
         RawSessionData sessionData = new RawSessionData();
         String sessionName = txtSessionName.getText() != null && !txtSessionName.getText().isEmpty() ? txtSessionName.getText() : String.format("Sesija kreirana %s", sdf.format(session.getCreatedAt()));
         sessionData.setName(sessionName);
-        sessionData.setDataFile(csvFile == null ? studentFileModel.getSelectedFileItem() : csvFile, jcbxStudentFile.getSelectedItem().toString());
+        sessionData.setDataFile(csvFile == null ? studentFileModel.getSelectedFileItem() : csvFile, jcbxStudentData.getSelectedItem().toString());
         sessionData.setEmailColumn(jcbxEmailColumn.getSelectedIndex() == 0 ? null : jcbxEmailColumn.getSelectedItem().toString());
         sessionData.setGrouped(jtbtnGroupIndicator.isSelected());
         sessionData.setGroupColumn(jcbxGroupColumn.getSelectedIndex() == 0 ? null : jcbxGroupColumn.getSelectedItem().toString());
-        sessionData.setTemplateFile(templateFile== null ? templateFileModel.getSelectedFileItem() : templateFile, jcbxTemplateFiles.getSelectedItem().toString());
+        sessionData.setTemplateFile(templateFile== null ? templateFileModel.getSelectedFileItem() : templateFile, jcbxTemplateFile.getSelectedItem().toString());
         sessionData.setHolder(txtHolderStart.getText(), txtHolderEnd.getText());
         sessionData.setDataUploaded(dataUploaded);
         sessionData.setTemplateUploaded(templateUploaded);
@@ -561,13 +548,13 @@ public class SessionWindow extends javax.swing.JDialog implements SessionWinCont
     @Override
     public void updateHolderStart(String value) {
         txtHolderStart.setText(value);
-        lblExampleHolderStart.setText(txtHolderStart.getText());
+        lblHolderStartExample.setText(txtHolderStart.getText());
     }
 
     @Override
     public void updateHolderEnd(String value) {
         txtHolderEnd.setText(value);
-        lblExampleHolderEnd.setText(txtHolderEnd.getText());
+        lblHolderEndExample.setText(txtHolderEnd.getText());
     }
 
     @Override

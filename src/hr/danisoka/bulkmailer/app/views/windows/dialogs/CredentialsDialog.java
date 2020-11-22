@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package hr.danisoka.bulkmailer.app.views.windows;
+package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.contracts.CredentialsWinContract;
 import java.awt.Color;
@@ -14,16 +9,13 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CredentialsWindow extends javax.swing.JDialog implements CredentialsWinContract.View{
+public class CredentialsDialog extends javax.swing.JDialog implements CredentialsWinContract.View{
 
-    /**
-     * Creates new form CredentialsWindow
-     */
-    public CredentialsWindow() {
+    public CredentialsDialog(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         lblErrorMessage.setVisible(false);
         setupButtons();
-        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
@@ -35,62 +27,78 @@ public class CredentialsWindow extends javax.swing.JDialog implements Credential
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jSeparator2 = new javax.swing.JSeparator();
+        lblDialogInstruction = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
         btnSignIn = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        txtPassword = new javax.swing.JPasswordField();
         jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
-        label1 = new java.awt.Label();
-        jLabel1 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
         lblErrorMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Korisnički podaci za e-mail");
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(234, 191));
-        setName("winCredentials"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(449, 250));
+        setModal(true);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0};
-        layout.rowHeights = new int[] {0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0};
+        layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
-        lblUsername.setText("Korisničko ime:");
-        lblUsername.setToolTipText("");
+        lblDialogInstruction.setText("<html>Unesite <b>puni e-email</b> i lozinku koje koristite za prijavu na e-mail putem<br/>kojeg želite poslati podatke.<br/><br/>Trenutno je podržan samo FOI  email. Znači unesite <b>domenu @foi.unizg.hr</b>.</html>");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
-        getContentPane().add(lblUsername, gridBagConstraints);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 5;
+        getContentPane().add(lblDialogInstruction, gridBagConstraints);
 
-        txtUsername.setPreferredSize(new java.awt.Dimension(200, 20));
+        lblUsername.setText("E-mail:  ");
+        lblUsername.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblUsername, gridBagConstraints);
+
+        txtUsername.setToolTipText("");
+        txtUsername.setMinimumSize(new java.awt.Dimension(200, 20));
+        txtUsername.setPreferredSize(new java.awt.Dimension(200, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipady = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(txtUsername, gridBagConstraints);
 
-        lblPassword.setText("Lozinka:");
+        lblPassword.setText("Lozinka: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 4;
-        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblPassword, gridBagConstraints);
 
-        btnSignIn.setBackground(new java.awt.Color(0, 204, 0));
-        btnSignIn.setForeground(new java.awt.Color(255, 255, 255));
+        txtPassword.setMinimumSize(new java.awt.Dimension(200, 20));
+        txtPassword.setPreferredSize(new java.awt.Dimension(200, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 6;
+        gridBagConstraints.ipady = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(txtPassword, gridBagConstraints);
+
+        btnSignIn.setBackground(new java.awt.Color(0, 255, 0));
         btnSignIn.setText("Prijavi se");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 16;
         getContentPane().add(btnSignIn, gridBagConstraints);
 
@@ -98,62 +106,35 @@ public class CredentialsWindow extends javax.swing.JDialog implements Credential
         btnCancel.setForeground(new java.awt.Color(255, 255, 255));
         btnCancel.setText("Odustani");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(btnCancel, gridBagConstraints);
-
-        txtPassword.setAlignmentX(0.0F);
-        txtPassword.setPreferredSize(new java.awt.Dimension(200, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(txtPassword, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jSeparator2, gridBagConstraints);
-
-        label1.setPreferredSize(new java.awt.Dimension(956, 40));
-        label1.setText("Unesite korisničko ime i lozinku koje koristite za prijavu na e-mail putem kojeg želite poslati podatke.\n\nZa slučaj sa FOI e-mailom, nije potrebno unositi domenu (@foi.unizg.hr).");
-        label1.setVisible(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(label1, gridBagConstraints);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel1.setText("<html>Unesite korisničko ime i lozinku koje koristite za prijavu na e-mail putem<br/>\nkojeg želite poslati podatke.<br/><br/>Za slučaj sa FOI e-mailom, nije potrebno unositi <b>domenu (@foi.unizg.hr)</b>.</html>");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(jSeparator4, gridBagConstraints);
 
         lblErrorMessage.setForeground(new java.awt.Color(255, 0, 0));
-        lblErrorMessage.setText("jLabel2");
+        lblErrorMessage.setText("jLabel1");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblErrorMessage, gridBagConstraints);
 
@@ -161,15 +142,14 @@ public class CredentialsWindow extends javax.swing.JDialog implements Credential
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSignIn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private java.awt.Label label1;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblDialogInstruction;
     private javax.swing.JLabel lblErrorMessage;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
@@ -182,7 +162,7 @@ public class CredentialsWindow extends javax.swing.JDialog implements Credential
     private Color initialForeground;
     
     public void setupButtons() {
-        CredentialsWindow obj = this;
+        CredentialsDialog obj = this;
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -304,4 +284,5 @@ public class CredentialsWindow extends javax.swing.JDialog implements Credential
         }
         btnSignIn.setEnabled(enabled);
     }
+    
 }

@@ -1,27 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package hr.danisoka.bulkmailer.app.views.windows;
+package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.models.Session;
 import java.text.SimpleDateFormat;
 
-/**
- *
- * @author Danijel
- */
-public class SessionInfoWindow extends javax.swing.JDialog {
+public class SessionInfoDialog extends javax.swing.JDialog {
 
-    /**
-     * Creates new form SessionInfoWindow
-     */
-    public SessionInfoWindow(Session session) {
+    public SessionInfoDialog(java.awt.Frame parent, boolean modal, Session session) {
+        super(parent, modal);
         initComponents();
         this.session = session;
         populateView();
-        setModalityType(ModalityType.APPLICATION_MODAL);
     }
 
     /**
@@ -34,9 +22,11 @@ public class SessionInfoWindow extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         lblSessionName = new javax.swing.JLabel();
+        lblCreatedAt = new javax.swing.JLabel();
+        lblCreatedAtValue = new javax.swing.JLabel();
+        lblStudentDataFile = new javax.swing.JLabel();
+        lblStudentDataFilePath = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        lblDataFile = new javax.swing.JLabel();
-        lblDataFilePath = new javax.swing.JLabel();
         lblEmailColumn = new javax.swing.JLabel();
         lblEmailColumnValue = new javax.swing.JLabel();
         lblGroupIndicator = new javax.swing.JLabel();
@@ -49,204 +39,173 @@ public class SessionInfoWindow extends javax.swing.JDialog {
         lblHolderStartValue = new javax.swing.JLabel();
         lblHolderEnd = new javax.swing.JLabel();
         lblHolderEndValue = new javax.swing.JLabel();
-        lblCreatedAt = new javax.swing.JLabel();
-        lblCreatedAtValue = new javax.swing.JLabel();
+        lblAttempts = new javax.swing.JLabel();
         lblAttemptsCount = new javax.swing.JLabel();
-        lblAttemptCountValue = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
-        layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
+        layout.columnWidths = new int[] {0, 9, 0, 9, 0, 9, 0, 9, 0};
         layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
-        lblSessionName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblSessionName.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         lblSessionName.setText("jLabel1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 21;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblSessionName, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 21;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jSeparator1, gridBagConstraints);
-
-        lblDataFile.setText("Datoteka studenata: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblDataFile, gridBagConstraints);
-
-        lblDataFilePath.setText("jLabel1");
-        lblDataFilePath.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblDataFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblDataFilePath, gridBagConstraints);
-
-        lblEmailColumn.setText("Stupac za e-mail: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblEmailColumn, gridBagConstraints);
-
-        lblEmailColumnValue.setText("jLabel1");
-        lblEmailColumnValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblEmailColumnValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblEmailColumnValue, gridBagConstraints);
-
-        lblGroupIndicator.setText("Timsko slanje: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblGroupIndicator, gridBagConstraints);
-
-        lblGroupIndicatorValue.setText("jLabel1");
-        lblGroupIndicatorValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblGroupIndicatorValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblGroupIndicatorValue, gridBagConstraints);
-
-        lblGroupColumn.setText("Stupac za tim: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblGroupColumn, gridBagConstraints);
-
-        lblGroupColumnValue.setText("jLabel1");
-        lblGroupColumnValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblGroupColumnValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblGroupColumnValue, gridBagConstraints);
-
-        lblTemplateFile.setText("Datoteka predloška e-maila: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblTemplateFile, gridBagConstraints);
-
-        lblTemplateFilePath.setText("jLabel1");
-        lblTemplateFilePath.setMaximumSize(new java.awt.Dimension(500, 14));
-        lblTemplateFilePath.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblTemplateFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblTemplateFilePath, gridBagConstraints);
-
-        lblHolderStart.setText("Početak placeholder-a: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblHolderStart, gridBagConstraints);
-
-        lblHolderStartValue.setText("jLabel1");
-        lblHolderStartValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblHolderStartValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblHolderStartValue, gridBagConstraints);
-
-        lblHolderEnd.setText("Kraj placeholder-a: ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblHolderEnd, gridBagConstraints);
-
-        lblHolderEndValue.setText("jLabel1");
-        lblHolderEndValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblHolderEndValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.ipadx = 6;
-        gridBagConstraints.ipady = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblHolderEndValue, gridBagConstraints);
 
         lblCreatedAt.setText("Kreirano: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblCreatedAt, gridBagConstraints);
 
         lblCreatedAtValue.setText("jLabel1");
-        lblCreatedAtValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblCreatedAtValue.setPreferredSize(new java.awt.Dimension(300, 14));
+        lblCreatedAtValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblCreatedAtValue.setPreferredSize(new java.awt.Dimension(500, 14));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(lblCreatedAtValue, gridBagConstraints);
 
-        lblAttemptsCount.setText("Broj slanja:");
+        lblStudentDataFile.setText("Datoteka studenata: ");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblStudentDataFile, gridBagConstraints);
+
+        lblStudentDataFilePath.setText("jLabel1");
+        lblStudentDataFilePath.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblStudentDataFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        getContentPane().add(lblStudentDataFilePath, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(jSeparator1, gridBagConstraints);
+
+        lblEmailColumn.setText("Stupac za e-mail: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblEmailColumn, gridBagConstraints);
+
+        lblEmailColumnValue.setText("jLabel1");
+        lblEmailColumnValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblEmailColumnValue.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        getContentPane().add(lblEmailColumnValue, gridBagConstraints);
+
+        lblGroupIndicator.setText("Timsko slanje: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblGroupIndicator, gridBagConstraints);
+
+        lblGroupIndicatorValue.setText("jLabel1");
+        lblGroupIndicatorValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblGroupIndicatorValue.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 12;
+        getContentPane().add(lblGroupIndicatorValue, gridBagConstraints);
+
+        lblGroupColumn.setText("Stupac za tim: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblGroupColumn, gridBagConstraints);
+
+        lblGroupColumnValue.setText("jLabel1");
+        lblGroupColumnValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblGroupColumnValue.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 14;
+        getContentPane().add(lblGroupColumnValue, gridBagConstraints);
+
+        lblTemplateFile.setText("Datoteka predloška e-maila:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblTemplateFile, gridBagConstraints);
+
+        lblTemplateFilePath.setText("jLabel1");
+        lblTemplateFilePath.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblTemplateFilePath.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 16;
+        getContentPane().add(lblTemplateFilePath, gridBagConstraints);
+
+        lblHolderStart.setText("Početak placeholdera: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblHolderStart, gridBagConstraints);
+
+        lblHolderStartValue.setText("jLabel1");
+        lblHolderStartValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblHolderStartValue.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 18;
+        getContentPane().add(lblHolderStartValue, gridBagConstraints);
+
+        lblHolderEnd.setText("Kraj placeholdera: ");
+        lblHolderEnd.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblHolderEnd, gridBagConstraints);
+
+        lblHolderEndValue.setText("jLabel1");
+        lblHolderEndValue.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblHolderEndValue.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 20;
+        getContentPane().add(lblHolderEndValue, gridBagConstraints);
+
+        lblAttempts.setText("Broj slanja: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 22;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(lblAttempts, gridBagConstraints);
+
+        lblAttemptsCount.setText("jLabel1");
+        lblAttemptsCount.setMinimumSize(new java.awt.Dimension(500, 14));
+        lblAttemptsCount.setPreferredSize(new java.awt.Dimension(500, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 22;
         getContentPane().add(lblAttemptsCount, gridBagConstraints);
 
-        lblAttemptCountValue.setText("jLabel1");
-        lblAttemptCountValue.setMinimumSize(new java.awt.Dimension(300, 14));
-        lblAttemptCountValue.setPreferredSize(new java.awt.Dimension(300, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        getContentPane().add(lblAttemptCountValue, gridBagConstraints);
-
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lblAttemptCountValue;
+    private javax.swing.JLabel lblAttempts;
     private javax.swing.JLabel lblAttemptsCount;
     private javax.swing.JLabel lblCreatedAt;
     private javax.swing.JLabel lblCreatedAtValue;
-    private javax.swing.JLabel lblDataFile;
-    private javax.swing.JLabel lblDataFilePath;
     private javax.swing.JLabel lblEmailColumn;
     private javax.swing.JLabel lblEmailColumnValue;
     private javax.swing.JLabel lblGroupColumn;
@@ -258,6 +217,8 @@ public class SessionInfoWindow extends javax.swing.JDialog {
     private javax.swing.JLabel lblHolderStart;
     private javax.swing.JLabel lblHolderStartValue;
     private javax.swing.JLabel lblSessionName;
+    private javax.swing.JLabel lblStudentDataFile;
+    private javax.swing.JLabel lblStudentDataFilePath;
     private javax.swing.JLabel lblTemplateFile;
     private javax.swing.JLabel lblTemplateFilePath;
     // End of variables declaration//GEN-END:variables
@@ -268,13 +229,13 @@ public class SessionInfoWindow extends javax.swing.JDialog {
     private void populateView() {
         lblSessionName.setText(session.getName() == null ? "-" : session.getName());
         lblCreatedAtValue.setText(session.getCreatedAt() == null ?  "-" : sdf.format(session.getCreatedAt()));
-        lblDataFilePath.setText(session.getDataFilePath() == null ? "-" : session.getDataFilePath());
+        lblStudentDataFilePath.setText(session.getDataFilePath() == null ? "-" : session.getDataFilePath());
         lblEmailColumnValue.setText(session.getEmailColumn() == null ? "-" : session.getEmailColumn());
         lblGroupIndicatorValue.setText(session.hasGroup() ? "DA" : "NE");
         lblGroupColumnValue.setText(session.getGroupColumn() == null ? "-" :  session.getGroupColumn());
         lblTemplateFilePath.setText(session.getTemplateFilePath() == null ? "-" : session.getTemplateFilePath());
         lblHolderStartValue.setText(session.getHolderStart() == null ? "-" : session.getHolderStart());
         lblHolderEndValue.setText(session.getHolderEnd() == null ? "-" : session.getHolderEnd());
-        lblAttemptCountValue.setText(session.getAttempts() == null ? "-" : String.valueOf(session.getAttempts().size()));
+        lblAttemptsCount.setText(session.getAttempts() == null ? "-" : String.valueOf(session.getAttempts().size()));
     }
 }

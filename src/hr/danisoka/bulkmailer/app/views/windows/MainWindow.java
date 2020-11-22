@@ -5,6 +5,7 @@
  */
 package hr.danisoka.bulkmailer.app.views.windows;
 
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.CredentialsDialog;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
@@ -13,6 +14,7 @@ import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionDialog;
 import hr.danisoka.bulkmailer.app.views.windows.panels.SessionContainerPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -203,11 +205,11 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     
     public void handleCredentials() {
         BulkMailerApplication app = BulkMailerApplication.getInstance();
-        CredentialsWindow credWin = new CredentialsWindow();
-        CredentialsController controller = new CredentialsController(credWin);
-        credWin.setController(controller);        
+        CredentialsDialog credDialog = new CredentialsDialog(this, true);
+        CredentialsController controller = new CredentialsController(credDialog);
+        credDialog.setController(controller);        
         
-        credWin.addComponentListener(new ComponentAdapter() {
+        credDialog.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
                 BulkMailerApplication app = BulkMailerApplication.getInstance();
@@ -217,23 +219,23 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
             }                
         });
         
-        credWin.setVisible(true);
+        credDialog.setVisible(true);
     }
     
     private void handleSessionCreation() {
         this.setEnabled(false);
-        SessionWindow newSession = new SessionWindow(this);
-        SessionDataController controller = new SessionDataController(newSession);
-        controller.setErrorListener(newSession);
-        newSession.setController(controller);
+        SessionDialog sessionDialog = new SessionDialog(this, true, this);
+        SessionDataController controller = new SessionDataController(sessionDialog);
+        controller.setErrorListener(sessionDialog);
+        sessionDialog.setController(controller);
 
-        newSession.addComponentListener(new ComponentAdapter() {
+        sessionDialog.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentHidden(ComponentEvent e) {
                 obj.setEnabled(true);
             }                
         });
-        newSession.setVisible(true);
+        sessionDialog.setVisible(true);
     }
 
     @Override
@@ -284,7 +286,7 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     }
     
     private void initializeSessionView(Session session) {
-        SessionContainerPanel sessionContainer = new SessionContainerPanel(session, obj);
+        SessionContainerPanel sessionContainer = new SessionContainerPanel(this, session, obj);
         sessionContainer.setVisible(true);         
         sessionItems.put(session.getId(), sessionContainer);
         jpSessionList.add(sessionContainer, BorderLayout.NORTH);
@@ -300,7 +302,8 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
     }
     
     private void handleDeletingAll() {
-        if(JOptionPane.showConfirmDialog(this, "Jesi li siguran da želiš obrisati sve sesije?", "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
+        Object[] croatianOtions = new Object[]{"Da", "Ne"};
+        if(JOptionPane.showOptionDialog(this, "Jesi li siguran da želiš obrisati sve sesije?", "Upozorenje", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, croatianOtions, croatianOtions[0]) == JOptionPane.YES_OPTION){
             SessionDataController controller = new SessionDataController(null);
             controller.setErrorListener(this);
             controller.deleteAll();

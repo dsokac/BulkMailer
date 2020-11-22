@@ -16,7 +16,6 @@ import hr.danisoka.bulkmailer.app.strategies.BuildingMailDataFactory;
 import hr.danisoka.bulkmailer.app.strategies.BuildingMailDataInterface;
 import hr.danisoka.bulkmailer.app.utils.FileUtils;
 import hr.danisoka.bulkmailer.app.utils.StringUtils;
-import hr.danisoka.bulkmailer.app.views.windows.ExecuteBulkMailSession;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -83,9 +82,9 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
                 data = strat.buildMailData();   
             }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ExecuteBulkMailSession.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteBulkMailSessionController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ExecuteBulkMailSession.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteBulkMailSessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -125,7 +124,7 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
             }
             templateFileContent = doc.html();
         } catch (IOException ex) {
-            Logger.getLogger(ExecuteBulkMailSession.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExecuteBulkMailSessionController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return templateFileContent;
     }
