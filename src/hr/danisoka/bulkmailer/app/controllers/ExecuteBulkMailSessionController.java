@@ -78,7 +78,7 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
 
             mapDataToJavaObjects(specifiedEmails);
             if(progressListener != null) {
-                progressListener.setProgressAction("Popunjavanje e-mail predloška", this.data.size());
+                progressListener.setProgressAction("Popunjavanje e-mail predloška", this.data.size(), false);
             }
             int count = 0;
             for(MailRecipientData item : this.data) {

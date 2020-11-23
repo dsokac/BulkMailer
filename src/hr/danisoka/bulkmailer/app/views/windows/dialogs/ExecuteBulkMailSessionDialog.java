@@ -1,11 +1,12 @@
 package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
+import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
 import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
+import hr.danisoka.bulkmailer.app.mailers.FoiMailer;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javafx.concurrent.Task;
 import javax.swing.SwingUtilities;
 
 public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener {
@@ -156,6 +158,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private PreviewEmailDialog previewEmailsDialog;
     private String previousMailSpecification = null;
     private ProgressListener progressListener;
+    private BulkMailerApplication app = BulkMailerApplication.getInstance();
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
@@ -229,39 +232,53 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     }
     
     private void sendEmails(BulkEmailData data) {
-        
+        //setProgressAction("Sending e-mails", 100, true);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                FoiMailer foiMailer = new FoiMailer(app.getUsername(), app.getPassword());
+                foiMailer.setProgressListener(obj);
+                btnSend.setEnabled(false);
+                foiMailer.createMessages(data.getSubject(), data.convertToMessageItems(session));
+                foiMailer.sendMessages();
+                prepareProgressBar(); 
+                btnSend.setEnabled(true);
+                return null;
+            }
+        };
+        task.run();
     }
     
     private void prepareProgressBar() {
-        EventQueue.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             jpbarProgress.setIndeterminate(false);
             jpbarProgress.setValue(0);
             lblProgressTask.setText(null);
             lblProgressTask.setVisible(false);
-            lblProgressTask.revalidate();
-            jpbarProgress.revalidate();
+            jpbarProgress.update(jpbarProgress.getGraphics());
+            lblProgressTask.update(lblProgressTask.getGraphics());
         });
     }
 
     @Override
-    public void setProgressAction(String actionName, int totalTaskCount) {
-        EventQueue.invokeLater(() -> {
-            jpbarProgress.setIndeterminate(false);
+    public void setProgressAction(String actionName, int totalTaskCount, boolean indeterminate) {
+        SwingUtilities.invokeLater(() -> {
+            jpbarProgress.setIndeterminate(indeterminate);
             jpbarProgress.setValue(0);
             jpbarProgress.setMinimum(0);
             jpbarProgress.setMaximum(totalTaskCount);
             lblProgressTask.setText(actionName + "...");
             lblProgressTask.setVisible(true);
-            lblProgressTask.revalidate();
-            jpbarProgress.revalidate();
+            jpbarProgress.update(jpbarProgress.getGraphics());
+            lblProgressTask.update(lblProgressTask.getGraphics());
         });
     }
 
     @Override
     public void updateProgress(int currentTask) {
-        EventQueue.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             jpbarProgress.setValue(currentTask);
-            jpbarProgress.revalidate();
+            jpbarProgress.update(jpbarProgress.getGraphics());
         });
     }
     

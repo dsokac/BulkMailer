@@ -37,7 +37,7 @@ public class SingleBuildingMailData implements BuildingMailDataInterface {
         List<List<String>> rawData = CsvUtils.getDataAllRowFromFile(csvData, ";");
         int indexEmailColumn = headers.indexOf(session.getEmailColumn());
         if(progressListener != null) {
-            progressListener.setProgressAction("Pripremanje e-mailova...", rawData.size());
+            progressListener.setProgressAction("Pripremanje e-mailova...", rawData.size(), false);
         }
         int count = 0;
         for(List<String> row : rawData) {

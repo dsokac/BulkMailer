@@ -1,5 +1,7 @@
 package hr.danisoka.bulkmailer.app.mailers;
 
+import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -32,6 +34,8 @@ public abstract class Mailer {
     protected List<Message> messages = new ArrayList<>();
     protected MailerListener listener = null;
     
+    protected ProgressListener progressListener;
+    
     public Mailer(String username, String password) {        
         initialize(username, password);
     }
@@ -39,6 +43,10 @@ public abstract class Mailer {
     public Mailer(String username, String password, MailerListener listener) {        
         this.listener = listener;
         initialize(username, password);
+    }
+    
+    public void setProgressListener(ProgressListener progressListener) {
+        this.progressListener = progressListener;
     }
     
     public void setListener(MailerListener listener) {
@@ -63,11 +71,18 @@ public abstract class Mailer {
         });
     }
     
-    private void createMessages(String subject, List<MessageItem> messageItems) {
+    public void createMessages(String subject, List<MessageItem> messageItems) {
         this.messages.clear();
+        if(progressListener != null) {
+            progressListener.setProgressAction("Kreiranje poruka", messageItems.size(), true);
+        }
+        int count = 0;
         for(MessageItem item : messageItems) {
             Message m = createMessage(subject, item.getRecipients(), item.getContent());
             this.messages.add(m);
+            if(progressListener != null) {
+                progressListener.updateProgress(++count);
+            }
         }
     }
     
@@ -79,10 +94,16 @@ public abstract class Mailer {
             message.setRecipients(
               Message.RecipientType.TO, recipients);
             message.setSubject(subject);
+            message.addHeader(content, subject);
+            message.setHeader("Content-Type", "text/html; charset=UTF-8");
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(content, "text/html");
-
+            //mimeBodyPart.setContent(new String(content.getBytes("UTF8"),"ISO-8859-1"), "text/html");
+            //mimeBodyPart.setText(content, "utf-8", "text/html");
+            mimeBodyPart.setHeader("Content-Type","text/plain; charset=\"utf-8\""); 
+            mimeBodyPart.setContent( content, "text/html; charset=utf-8" ); 
+            mimeBodyPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+            
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(mimeBodyPart);
 
@@ -97,7 +118,12 @@ public abstract class Mailer {
             if(listener != null) {
                 listener.onErrorOccured(ex, ex.getMessage());
             }
-        }
+        } /*catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+            if(listener != null) {
+                listener.onErrorOccured(ex, ex.getMessage());
+            }
+        }*/
         return message;
     }
     
@@ -114,9 +140,24 @@ public abstract class Mailer {
     
     public void sendMessages() {
         Transport transport = null;
+        if(progressListener != null) {
+            progressListener.setProgressAction("Slanje poruka", messages.size(), true);
+        }
         try {
             transport = this.session.getTransport("smtp");
             transport.connect();
+            int count = 0;
+            for(Message m : messages) {
+                sendMessage(transport, m);
+                try {
+                    Thread.sleep(getSleepValue() * 1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if(progressListener != null) {
+                    progressListener.updateProgress(++count);
+                }
+            }
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
             if(listener != null) {
@@ -143,6 +184,7 @@ public abstract class Mailer {
     
     protected abstract void prepare();
     protected abstract void setProperties();
+    protected abstract int getSleepValue();
 
     public interface MailerListener {
         void onErrorOccured(Exception ex, String message);

@@ -13,6 +13,10 @@ public class FoiMailer extends Mailer{
     }
 
     @Override
+    protected int getSleepValue() {
+        return 5;
+    }
+
     @Override
     protected void prepare() {
      

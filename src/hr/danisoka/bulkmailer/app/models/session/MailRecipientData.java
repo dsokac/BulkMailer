@@ -39,9 +39,10 @@ public class MailRecipientData {
     }
     public Address[] getRecipientsArray(String emailKey) throws AddressException {
         Address[] addresses = new Address[this.recipientData.size()];
+        int count = 0;
         for(RecipientData item : recipientData) {
             Address a = new InternetAddress(item.<String>getValueAsType(emailKey));
-            addresses[addresses.length] = a;
+            addresses[count++] = a;
         }
         return addresses;
     }

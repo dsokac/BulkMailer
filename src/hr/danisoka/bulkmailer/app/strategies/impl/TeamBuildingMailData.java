@@ -40,7 +40,7 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
         List<String> wantedGroupValues = new ArrayList<>();
         if(emails != null) {
             if(progressListener != null) {
-                progressListener.setProgressAction("Filtriranje podataka", rawData.size());
+                progressListener.setProgressAction("Filtriranje podataka", rawData.size(), false);
             }
             int count = 0;
             for(List<String> row : rawData) {
@@ -54,7 +54,7 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
         }
         
         if(progressListener != null) {
-            progressListener.setProgressAction("Kreiranje timova...", rawData.size());
+            progressListener.setProgressAction("Kreiranje timova...", rawData.size(), false);
         }
         int count = 0;
         for(List<String> row : rawData) {
