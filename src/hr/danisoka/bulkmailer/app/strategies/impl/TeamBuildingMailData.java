@@ -1,5 +1,6 @@
 package hr.danisoka.bulkmailer.app.strategies.impl;
 
+import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.MailRecipientData;
 import hr.danisoka.bulkmailer.app.models.session.RecipientData;
@@ -15,10 +16,17 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
     
     private Session session;
     private List<String> emails;
+    private ProgressListener progressListener;
     
     public TeamBuildingMailData(Session session, List<String> emails) {
         this.session = session;
         this.emails = emails;
+    }
+    
+     public TeamBuildingMailData(Session session, List<String> emails, ProgressListener progressListener) {
+        this.session = session;
+        this.emails = emails;
+        this.progressListener = progressListener;
     }
 
     @Override
@@ -31,13 +39,24 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
         List<List<String>> rawData = CsvUtils.getDataAllRowFromFile(csvData, ";");
         List<String> wantedGroupValues = new ArrayList<>();
         if(emails != null) {
+            if(progressListener != null) {
+                progressListener.setProgressAction("Filtriranje podataka", rawData.size());
+            }
+            int count = 0;
             for(List<String> row : rawData) {
                 if(!wantedGroupValues.contains(row.get(indexOfGroupColumn)) && emails.contains(row.get(indexOfEmailColumn))) {
                     wantedGroupValues.add(row.get(indexOfGroupColumn));
                 }
+                if(progressListener != null) {
+                    progressListener.updateProgress(++count);
+                }
             }
         }
         
+        if(progressListener != null) {
+            progressListener.setProgressAction("Kreiranje timova...", rawData.size());
+        }
+        int count = 0;
         for(List<String> row : rawData) {
             if((emails == null || (emails != null && emails.isEmpty())) || (emails !=  null && !emails.isEmpty() && wantedGroupValues.contains(row.get(indexOfGroupColumn)))) {
                 MailRecipientData existing = MailRecipientData.findByGroupingValue(data, row.get(indexOfGroupColumn));
@@ -51,8 +70,16 @@ public class TeamBuildingMailData implements BuildingMailDataInterface{
                     recipientData.add(RecipientData.convertFrom(headers, row));
                 }
             }
+            if(progressListener != null) {
+                progressListener.updateProgress(++count);
+            }
         }
         return data;
+    }
+
+    @Override
+    public void setProgressListener(ProgressListener progressListener) {
+        this.progressListener = progressListener;
     }
     
 }

@@ -1,5 +1,6 @@
 package hr.danisoka.bulkmailer.app.contracts;
 
+import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
 
@@ -11,5 +12,6 @@ public interface ExecuteSessionContract {
     interface Controller {
         void processSending(Session session, String mode, String specifiedEmails);
         void processPreviewing(Session session, String mode, String specifiedEmails);
+        void setProgressListener(ProgressListener progressListener);
     }
 }

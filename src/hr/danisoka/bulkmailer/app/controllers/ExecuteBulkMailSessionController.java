@@ -6,6 +6,7 @@
 package hr.danisoka.bulkmailer.app.controllers;
 
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
+import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
@@ -38,11 +39,18 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
     private List<MailRecipientData> data;
     private int numberOfTeamMemberDataShown;
     private BulkEmailData bulkEmailData;
+    private ProgressListener progressListener;
     
     
     public ExecuteBulkMailSessionController(ExecuteSessionContract.View view, MailLoggerHandler.LoggerErrorListener errorListener) {
         this.view = view;
         this.errorListener = errorListener;
+    }
+    
+    public ExecuteBulkMailSessionController(ExecuteSessionContract.View view, MailLoggerHandler.LoggerErrorListener errorListener, ProgressListener progressListener) {
+        this.view = view;
+        this.errorListener = errorListener;
+        this.progressListener = progressListener;
     }
     
     @Override
@@ -69,10 +77,17 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
             List<BulkEmailItem> emailItems = new ArrayList<>();
 
             mapDataToJavaObjects(specifiedEmails);
+            if(progressListener != null) {
+                progressListener.setProgressAction("Popunjavanje e-mail predloška", this.data.size());
+            }
+            int count = 0;
             for(MailRecipientData item : this.data) {
                 String modifiedHtml = handleTemplateHtml(item);
                 String populatedTemplateFileContent = replacePlaceholdersForEmailData(item, modifiedHtml);
                 emailItems.add(new BulkEmailItem(item, populatedTemplateFileContent));
+                if(progressListener != null) {
+                    progressListener.updateProgress(++count);
+                }
             }
 
             this.bulkEmailData = new BulkEmailData("ERP Sustav: Rad na virtualnom poduzeću", emailItems);
@@ -142,5 +157,10 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
         while(m.find()) {
            numberOfTeamMemberDataShown++;
         }
+    }
+
+    @Override
+    public void setProgressListener(ProgressListener progressListener) {
+        this.progressListener = progressListener;
     }
 }

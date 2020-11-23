@@ -2,8 +2,10 @@ package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
+import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
 import hr.danisoka.bulkmailer.app.models.Session;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,14 +13,16 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.SwingUtilities;
 
-public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View {
+public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener {
 
     public ExecuteBulkMailSessionDialog(java.awt.Frame parent, boolean modal, Session session) {
         super(parent, modal);
         initComponents();
         setupButtons();
         this.parent = parent;
+        prepareProgressBar();
         this.session = session;
         this.setTitle(this.session.getName());
         this.jcboxEmailMode.addItemListener(new ItemListener() {
@@ -31,7 +35,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
                 }
                 bulkEmailData = null;
             }
-        });
+        });      
     }
 
     /**
@@ -49,12 +53,14 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
         txtEmailSpecification = new javax.swing.JTextField();
         btnPreviewAll = new javax.swing.JButton();
         btnSend = new javax.swing.JButton();
+        jpbarProgress = new javax.swing.JProgressBar();
+        lblProgressTask = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
         layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
+        layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
         getContentPane().setLayout(layout);
 
         lblEmailMode.setText("Način slanja e-mail pošte:");
@@ -93,7 +99,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
         btnPreviewAll.setText("Pregledaj sve");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -102,11 +108,28 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
         btnSend.setText("Pošalji");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.ipadx = 2;
         gridBagConstraints.ipady = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         getContentPane().add(btnSend, gridBagConstraints);
+
+        jpbarProgress.setForeground(new java.awt.Color(0, 255, 0));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.ipady = 4;
+        getContentPane().add(jpbarProgress, gridBagConstraints);
+
+        lblProgressTask.setText("jLabel1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 3;
+        getContentPane().add(lblProgressTask, gridBagConstraints);
 
         pack();
         setLocationRelativeTo(null);
@@ -118,8 +141,10 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private javax.swing.JButton btnPreviewAll;
     private javax.swing.JButton btnSend;
     private javax.swing.JComboBox<String> jcboxEmailMode;
+    private javax.swing.JProgressBar jpbarProgress;
     private javax.swing.JLabel lblEmailMode;
     private javax.swing.JLabel lblEmailSpecification;
+    private javax.swing.JLabel lblProgressTask;
     private javax.swing.JTextField txtEmailSpecification;
     // End of variables declaration//GEN-END:variables
 
@@ -130,9 +155,11 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private ExecuteBulkMailSessionDialog obj = this;
     private PreviewEmailDialog previewEmailsDialog;
     private String previousMailSpecification = null;
+    private ProgressListener progressListener;
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
+        this.controller.setProgressListener(this);
     }
     
     private void setupButtons() {
@@ -178,6 +205,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     @Override
     public void onBulkMailDataReady(BulkEmailData data, boolean forPreview) {
         this.bulkEmailData = data;
+        prepareProgressBar();
         if(forPreview) {
             previewEmails(data);
         } else {
@@ -202,6 +230,39 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     
     private void sendEmails(BulkEmailData data) {
         
+    }
+    
+    private void prepareProgressBar() {
+        EventQueue.invokeLater(() -> {
+            jpbarProgress.setIndeterminate(false);
+            jpbarProgress.setValue(0);
+            lblProgressTask.setText(null);
+            lblProgressTask.setVisible(false);
+            lblProgressTask.revalidate();
+            jpbarProgress.revalidate();
+        });
+    }
+
+    @Override
+    public void setProgressAction(String actionName, int totalTaskCount) {
+        EventQueue.invokeLater(() -> {
+            jpbarProgress.setIndeterminate(false);
+            jpbarProgress.setValue(0);
+            jpbarProgress.setMinimum(0);
+            jpbarProgress.setMaximum(totalTaskCount);
+            lblProgressTask.setText(actionName + "...");
+            lblProgressTask.setVisible(true);
+            lblProgressTask.revalidate();
+            jpbarProgress.revalidate();
+        });
+    }
+
+    @Override
+    public void updateProgress(int currentTask) {
+        EventQueue.invokeLater(() -> {
+            jpbarProgress.setValue(currentTask);
+            jpbarProgress.revalidate();
+        });
     }
     
 }
