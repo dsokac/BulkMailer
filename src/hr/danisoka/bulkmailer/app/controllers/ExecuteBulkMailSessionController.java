@@ -116,12 +116,12 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
         Pattern pattern = Pattern.compile(patternString, Pattern.MULTILINE);
         Matcher m  = pattern.matcher(templateFileContent);
         int countHolders = -1;
-        int teamMemberCount = -1;
+        int teamMemberCount = session.hasGroup() ? -1 : 0;
         while(m.find()) {
            countHolders++;
            String placeholder = m.group(0);
            String placeholderKey = m.group(1);
-           if(countHolders%numberOfTeamMemberDataShown == 0) {
+           if(session.hasGroup() && countHolders%numberOfTeamMemberDataShown == 0) {
                teamMemberCount++;
            }
            RecipientData current = emailData.getRecipientData().get(teamMemberCount);
@@ -136,7 +136,9 @@ public class ExecuteBulkMailSessionController implements ExecuteSessionContract.
             templateFileContent = FileUtils.getFileContent(new File(session.getTemplateFilePath()));
             Document doc = Jsoup.parse(templateFileContent);
             Element repetitiveEl = doc.selectFirst("#repetitiveElement");
-            learnAboutTeamMember(repetitiveEl);
+            if(repetitiveEl != null) {
+                learnAboutTeamMember(repetitiveEl);
+            }
             Element tableEl = doc.selectFirst("table > tbody");
             for(int i = 1; i < emailData.getRecipientData().size(); i++) {
                 tableEl.appendChild(repetitiveEl.clone());
