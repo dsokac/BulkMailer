@@ -24,8 +24,6 @@ public abstract class Mailer {
 
     protected String username = null;
     protected String password = null;
-    protected String emailDomain = null;
-    protected Boolean loginWithFullEmail = false;
     
     protected Properties properties = null;
     protected Session session = null;
@@ -52,10 +50,7 @@ public abstract class Mailer {
         this.password = password;
         prepare();
         setProperties();     
-        this.fromAddress = this.loginWithFullEmail ? this.username : String.format("%s%s", this.username, this.emailDomain);
-        if(!this.loginWithFullEmail) {
-            this.username += this.emailDomain;
-        }
+        this.fromAddress = this.username;
         createSession();       
     }
     

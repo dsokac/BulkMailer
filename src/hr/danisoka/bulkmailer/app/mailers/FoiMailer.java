@@ -13,9 +13,9 @@ public class FoiMailer extends Mailer{
     }
 
     @Override
+    @Override
     protected void prepare() {
-        this.emailDomain = "@foi.unizg.hr";
-        this.loginWithFullEmail = false;
+     
     }   
 
     @Override

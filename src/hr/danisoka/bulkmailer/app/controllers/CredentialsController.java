@@ -15,8 +15,8 @@ public class CredentialsController implements CredentialsWinContract.Controller{
     @Override
     public void storeCredentials(String username, String password) {
         if(username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
-            if(username.contains("@")) {
-                view.showFormErrorMessage("Korisničko ime ne smije sadržavati domenu (@foi.unizg.hr).");
+            if(!username.contains("@")) {
+                view.showFormErrorMessage("Korisničko ime mora sadržavati domenu (@foi.unizg.hr).");
             } else {
                 app.setUsername(username);
                 app.setPassword(password);
