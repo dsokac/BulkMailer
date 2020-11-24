@@ -4,6 +4,7 @@ import com.sun.mail.util.MailLogger;
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
+import hr.danisoka.bulkmailer.app.listeners.AttemptListener;
 import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.mailers.FoiMailer;
@@ -27,13 +28,14 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener, MailLoggerHandler.LoggerErrorListener {
+public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener, MailLoggerHandler.LoggerErrorListener, Mailer.MailerListener {
 
     public ExecuteBulkMailSessionDialog(java.awt.Frame parent, boolean modal, Session session) {
         super(parent, modal);
         initComponents();
         setupButtons();
         this.parent = parent;
+        this.attemptListener = (AttemptListener)parent;
         prepareProgressBar();
         this.session = session;
         this.setTitle(this.session.getName());
@@ -173,6 +175,7 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private ProgressListener progressListener;
     private BulkMailerApplication app = BulkMailerApplication.getInstance();
     private MailLoggerHandler.LoggerErrorListener errorListener = this;
+    private AttemptListener attemptListener = null;
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
@@ -258,11 +261,14 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     
     private void executeSending(BulkEmailData data, AttemptJson attempt) {
         FoiMailer foiMailer = new FoiMailer(app.getUsername(), app.getPassword());
-        foiMailer.setProgressListener(obj);
+        foiMailer.setProgressListener(this);
+        foiMailer.setListener(this);
         foiMailer.setAttemptData(attempt);
         btnSend.setEnabled(false);
         foiMailer.createMessages(data.getSubject(), data.convertToMessageItems(session));
-        foiMailer.sendMessages();
+        if(attempt.getStatus() == null || attempt.getStatus().isEmpty()) {
+            foiMailer.sendMessages();
+        }
         prepareProgressBar(); 
         btnSend.setEnabled(true);
         attempt.setCompletedAt(new Date());
@@ -273,6 +279,9 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
         }
         try {
             AttemptUtils.storeAttempt(session, attempt);
+            if(attemptListener != null) {
+                attemptListener.onAttemptCreated(session);
+            }
         } catch (IOException ex) {
             Logger.getLogger(ExecuteBulkMailSessionDialog.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {
@@ -316,6 +325,11 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
 
     @Override
     public void onErrorOccurred(Exception ex, String message) {
+        JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void onErrorOccured(Exception ex, String message) {
         JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
     }
     

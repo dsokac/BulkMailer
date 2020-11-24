@@ -44,7 +44,7 @@ public class AttemptJson {
     public void setCompletedAt(Date completedAt) {
         this.completedAt = completedAt;
         long timeInSecond = (this.completedAt.getTime() - this.createdAt.getTime())/1000;
-        this.durationInSeconds = new BigDecimal(timeInSecond + 1);
+        this.durationInSeconds = new BigDecimal(timeInSecond);
     }
 
     public BigDecimal getDurationInSeconds() {

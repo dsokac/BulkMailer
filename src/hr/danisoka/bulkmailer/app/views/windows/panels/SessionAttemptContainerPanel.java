@@ -7,6 +7,8 @@ package hr.danisoka.bulkmailer.app.views.windows.panels;
 
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.models.attempts.AttemptJson;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionAttemptDetailsDialog;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -20,9 +22,10 @@ public class SessionAttemptContainerPanel extends javax.swing.JPanel {
     /**
      * Creates new form SessionAttemptContainerPanel
      */
-    public SessionAttemptContainerPanel(AttemptJson attempr) {
+    public SessionAttemptContainerPanel(Frame parent, AttemptJson attempt) {
         initComponents();
-        this.attempt = attempr;
+        this.attempt = attempt;
+        this.parent = parent;
         populate();
         setupButtons();
     }
@@ -73,7 +76,6 @@ public class SessionAttemptContainerPanel extends javax.swing.JPanel {
         add(lblCreatedAtValue, gridBagConstraints);
 
         btnOpenReport.setText("Otvori izvješće");
-        btnOpenReport.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 14;
         gridBagConstraints.gridy = 0;
@@ -99,7 +101,8 @@ public class SessionAttemptContainerPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private AttemptJson attempt;
-     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm:ss");
+    private Frame parent; 
     
     private void populate() {
         lblAttemptName.setText(String.format("Pokušaj kreiran %s", sdf.format(attempt.getCreatedAt())));
@@ -116,6 +119,7 @@ public class SessionAttemptContainerPanel extends javax.swing.JPanel {
     }
     
     private void handleAttemptDetails() {
-        
+        SessionAttemptDetailsDialog details = new SessionAttemptDetailsDialog(parent, true, attempt);
+        details.setVisible(true);
     }
 }

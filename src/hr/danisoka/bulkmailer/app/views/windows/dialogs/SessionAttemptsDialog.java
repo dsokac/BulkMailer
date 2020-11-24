@@ -6,6 +6,7 @@ import hr.danisoka.bulkmailer.app.models.attempts.AttemptJson;
 import hr.danisoka.bulkmailer.app.utils.AttemptUtils;
 import hr.danisoka.bulkmailer.app.views.windows.panels.SessionAttemptContainerPanel;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ public class SessionAttemptsDialog extends javax.swing.JDialog implements MailLo
         super(parent, modal);
         initComponents();
         this.session = session;
+        this.parent = parent;
         populateSessionAttempts();
         this.setTitle(this.session.getName());
     }
@@ -57,16 +59,16 @@ public class SessionAttemptsDialog extends javax.swing.JDialog implements MailLo
 
     private Session session;
     private MailLoggerHandler.LoggerErrorListener errorListener = this;
+    private Frame parent;
     
     private void populateSessionAttempts() {
         try {
             List<AttemptJson> attempts = AttemptUtils.getAllAttempts(session);
             int width = this.getWidth() - 20;
             int height = this.getHeight() - 20;
-            jpScrollPane.setPreferredSize(new Dimension(width, height));
             jpAttemptsPanel.setPreferredSize(new Dimension(width, height));
             for(AttemptJson attempt : attempts) {
-                SessionAttemptContainerPanel attemptPanel = new SessionAttemptContainerPanel(attempt);
+                SessionAttemptContainerPanel attemptPanel = new SessionAttemptContainerPanel(parent, attempt);
                 attemptPanel.setVisible(true);
                 jpAttemptsPanel.add(Box.createRigidArea(new Dimension(0, 14)));
                 jpAttemptsPanel.add(attemptPanel);
@@ -85,5 +87,6 @@ public class SessionAttemptsDialog extends javax.swing.JDialog implements MailLo
     @Override
     public void onErrorOccurred(Exception ex, String message) {
         JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
-    }
+    }    
+    
 }

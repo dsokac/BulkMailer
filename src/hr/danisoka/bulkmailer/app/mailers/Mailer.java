@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Address;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -37,6 +38,7 @@ public abstract class Mailer {
     
     protected AttemptJson attempt;
     protected ProgressListener progressListener;
+    protected boolean stopExecution = false;
     
     public Mailer(String username, String password) {        
         initialize(username, password);
@@ -89,6 +91,9 @@ public abstract class Mailer {
             if(progressListener != null) {
                 progressListener.updateProgress(++count);
             }
+            if(stopExecution) {
+                break;
+            }
         }
     }
     
@@ -104,8 +109,6 @@ public abstract class Mailer {
             message.setHeader("Content-Type", "text/html; charset=UTF-8");
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            //mimeBodyPart.setContent(new String(content.getBytes("UTF8"),"ISO-8859-1"), "text/html");
-            //mimeBodyPart.setText(content, "utf-8", "text/html");
             mimeBodyPart.setHeader("Content-Type","text/plain; charset=\"utf-8\""); 
             mimeBodyPart.setContent( content, "text/html; charset=utf-8" ); 
             mimeBodyPart.setHeader("Content-Transfer-Encoding", "quoted-printable");
@@ -115,9 +118,12 @@ public abstract class Mailer {
 
             message.setContent(multipart);
         } catch (AddressException ex) {
-            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+            attempt.setStatus("Neuspješno kreiranje poruka.");
+            attempt.setStatusMessage(ex.toString());
+            stopExecution = true;
             if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
+                listener.onErrorOccured(ex, ex.toString());
             }
         } catch (MessagingException ex) {
             attempt.getStatistics().incrementFailedItem();
@@ -128,16 +134,12 @@ public abstract class Mailer {
                     attempt.addRecipient(r);
                 }
             }
-            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.toString(), ex);
+            stopExecution = true;
             if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
+                listener.onErrorOccured(ex, ex.toString());
             }
-        } /*catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
-            if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
-            }
-        }*/
+        } 
         return message;
     }
     
@@ -147,7 +149,7 @@ public abstract class Mailer {
         } catch (MessagingException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
             if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
+                listener.onErrorOccured(ex, ex.toString());
             }
         }
     }
@@ -180,14 +182,21 @@ public abstract class Mailer {
                     progressListener.updateProgress(++count);
                 }
             }
+        } catch (AuthenticationFailedException ex) {
+            Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+            attempt.setStatus("Neuspješno");
+            attempt.setStatusMessage(ex.toString());
+            if(listener != null) {
+                listener.onErrorOccured(ex, ex.toString());
+            }
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
             attempt.setStatus("Neuspješno");
-            attempt.setStatusMessage(ex.getMessage());
+            attempt.setStatusMessage(ex.toString());
             if(listener != null) {
-                listener.onErrorOccured(ex, ex.getMessage());
+                listener.onErrorOccured(ex, ex.toString());
             }
-        } catch (MessagingException ex) {
+        }  catch (MessagingException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
             attempt.getStatistics().incrementFailedItem();
             try {
@@ -211,7 +220,7 @@ public abstract class Mailer {
                 } catch (MessagingException ex) {
                     Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
                     if(listener != null) {
-                        listener.onErrorOccured(ex, ex.getMessage());
+                        listener.onErrorOccured(ex, ex.toString());
                     }
                 }
             }

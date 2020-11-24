@@ -62,7 +62,6 @@
     <Component class="javax.swing.JButton" name="btnOpenReport">
       <Properties>
         <Property name="text" type="java.lang.String" value="Otvori izvje&#x161;&#x107;e"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

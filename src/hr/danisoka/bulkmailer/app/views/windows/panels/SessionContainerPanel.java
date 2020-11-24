@@ -17,6 +17,8 @@ import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionDialog;
 import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionInfoDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -196,6 +198,7 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.YYYY. HH:mm");
     private SessionListener listener;
     private JFrame parent;
+    private SessionAttemptsDialog attemptsDialog;
     
     private void populateView() {
         lblSessionName.setText(session.getName());
@@ -207,6 +210,10 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
         if(AttemptUtils.getAttemptCount(session) > 0) {
             btnReports.setEnabled(true);
         }
+    }
+    
+    public void updateAttemptCount() {
+         lblAttemptValue.setText(String.valueOf(AttemptUtils.getAttemptCount(session)));
     }
     
     public void updateView(Session session) {
@@ -287,8 +294,15 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     }
     
     private void showBulkMailSessionReports() {
-        SessionAttemptsDialog attemptsDialog = new SessionAttemptsDialog(parent, true, session);
-        attemptsDialog.setVisible(true);;
+        attemptsDialog = new SessionAttemptsDialog(parent, true, session);
+        attemptsDialog.setVisible(true);
+        attemptsDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                attemptsDialog = null;
+            }
+            
+        });
     }
     
     private void showBulkMailSessionInfo() {        

@@ -11,6 +11,7 @@ import hr.danisoka.bulkmailer.app.controllers.CredentialsController;
 import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.db.AppDatabase;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.SessionDaoImpl;
+import hr.danisoka.bulkmailer.app.listeners.AttemptListener;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
@@ -34,7 +35,7 @@ import javax.swing.Box;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener, SessionListener{
+public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.LoggerErrorListener, SessionListener, AttemptListener{
 
     /**
      * Creates new form MainWindow
@@ -317,5 +318,10 @@ public class MainWindow extends javax.swing.JFrame implements MailLoggerHandler.
             }
             sessionItems.clear();
         }
+    }
+
+    @Override
+    public void onAttemptCreated(Session session) {
+        this.sessionItems.get(session.getId()).updateAttemptCount();
     }
 }

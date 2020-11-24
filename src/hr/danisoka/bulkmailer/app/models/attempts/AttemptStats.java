@@ -48,4 +48,8 @@ public class AttemptStats {
     public void calculateUnprocessed(int totalSize) {
         this.unprocessedItems = totalSize - (processedItems + failedItems);
     }
+    
+    public Integer getTotal() {
+        return this.processedItems + this.failedItems + this.unprocessedItems;
+    }
 }
