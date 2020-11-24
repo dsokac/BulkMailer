@@ -10,7 +10,9 @@ import hr.danisoka.bulkmailer.app.controllers.SessionDataController;
 import hr.danisoka.bulkmailer.app.listeners.SessionListener;
 import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.utils.AttemptUtils;
 import hr.danisoka.bulkmailer.app.views.windows.dialogs.ExecuteBulkMailSessionDialog;
+import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionAttemptsDialog;
 import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionDialog;
 import hr.danisoka.bulkmailer.app.views.windows.dialogs.SessionInfoDialog;
 import java.awt.event.ActionEvent;
@@ -200,8 +202,11 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
         jcboxDataFile.setSelected(session.getDataFilePath() != null && !session.getDataFilePath().isEmpty());
         jcboxTemplateFile.setSelected(session.getTemplateFilePath()!= null && !session.getTemplateFilePath().isEmpty());
         jcboxGroup.setSelected(session.hasGroup());
-        lblAttemptValue.setText(session.getAttempts() != null ? String.valueOf(session.getAttempts().size()) : "-");
+        lblAttemptValue.setText(String.valueOf(AttemptUtils.getAttemptCount(session)));
         lblCreatedAtValue.setText(sdf.format(session.getCreatedAt()));
+        if(AttemptUtils.getAttemptCount(session) > 0) {
+            btnReports.setEnabled(true);
+        }
     }
     
     public void updateView(Session session) {
@@ -282,7 +287,8 @@ public class SessionContainerPanel extends javax.swing.JPanel implements MailLog
     }
     
     private void showBulkMailSessionReports() {
-        
+        SessionAttemptsDialog attemptsDialog = new SessionAttemptsDialog(parent, true, session);
+        attemptsDialog.setVisible(true);;
     }
     
     private void showBulkMailSessionInfo() {        

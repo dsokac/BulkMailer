@@ -1,12 +1,18 @@
 package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
+import com.sun.mail.util.MailLogger;
 import hr.danisoka.bulkmailer.app.AppConstants;
 import hr.danisoka.bulkmailer.app.BulkMailerApplication;
 import hr.danisoka.bulkmailer.app.contracts.ExecuteSessionContract;
 import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
+import hr.danisoka.bulkmailer.app.loggers.MailLoggerHandler;
 import hr.danisoka.bulkmailer.app.mailers.FoiMailer;
+import hr.danisoka.bulkmailer.app.mailers.Mailer;
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.models.attempts.AttemptJson;
 import hr.danisoka.bulkmailer.app.models.session.BulkEmailData;
+import hr.danisoka.bulkmailer.app.utils.AttemptUtils;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,10 +20,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javafx.concurrent.Task;
+import java.io.IOException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener {
+public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements ExecuteSessionContract.View, ProgressListener, MailLoggerHandler.LoggerErrorListener {
 
     public ExecuteBulkMailSessionDialog(java.awt.Frame parent, boolean modal, Session session) {
         super(parent, modal);
@@ -131,6 +141,9 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 5;
+        gridBagConstraints.ipady = 5;
         getContentPane().add(lblProgressTask, gridBagConstraints);
 
         pack();
@@ -159,12 +172,13 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     private String previousMailSpecification = null;
     private ProgressListener progressListener;
     private BulkMailerApplication app = BulkMailerApplication.getInstance();
+    private MailLoggerHandler.LoggerErrorListener errorListener = this;
     
     public void setController(ExecuteSessionContract.Controller controller) {
         this.controller = controller;
         this.controller.setProgressListener(this);
     }
-    
+        
     private void setupButtons() {
         btnPreviewAll.addActionListener(new ActionListener() {
             @Override
@@ -232,21 +246,39 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
     }
     
     private void sendEmails(BulkEmailData data) {
-        //setProgressAction("Sending e-mails", 100, true);
-        Task<Void> task = new Task<Void>() {
+        AttemptJson attempt = new AttemptJson();
+        attempt.setSessionName(session.getName());
+        EventQueue.invokeLater(new Runnable() {
             @Override
-            protected Void call() throws Exception {
-                FoiMailer foiMailer = new FoiMailer(app.getUsername(), app.getPassword());
-                foiMailer.setProgressListener(obj);
-                btnSend.setEnabled(false);
-                foiMailer.createMessages(data.getSubject(), data.convertToMessageItems(session));
-                foiMailer.sendMessages();
-                prepareProgressBar(); 
-                btnSend.setEnabled(true);
-                return null;
+            public void run() {
+                executeSending(data, attempt);
             }
-        };
-        task.run();
+        });
+    }
+    
+    private void executeSending(BulkEmailData data, AttemptJson attempt) {
+        FoiMailer foiMailer = new FoiMailer(app.getUsername(), app.getPassword());
+        foiMailer.setProgressListener(obj);
+        foiMailer.setAttemptData(attempt);
+        btnSend.setEnabled(false);
+        foiMailer.createMessages(data.getSubject(), data.convertToMessageItems(session));
+        foiMailer.sendMessages();
+        prepareProgressBar(); 
+        btnSend.setEnabled(true);
+        attempt.setCompletedAt(new Date());
+        attempt.getStatistics().calculateUnprocessed(data.getEmailItems().size());
+        if(attempt.getStatus() == null || attempt.getStatus().isEmpty()) {
+            attempt.setStatus("Uspješno");
+            attempt.setStatusMessage("Poruke su uspješno poslane.");
+        }
+        try {
+            AttemptUtils.storeAttempt(session, attempt);
+        } catch (IOException ex) {
+            Logger.getLogger(ExecuteBulkMailSessionDialog.class.getName()).log(Level.SEVERE, null, ex);
+            if(errorListener != null) {
+                errorListener.onErrorOccurred(ex, ex.getMessage());
+            }
+        }
     }
     
     private void prepareProgressBar() {
@@ -280,6 +312,11 @@ public class ExecuteBulkMailSessionDialog extends javax.swing.JDialog implements
             jpbarProgress.setValue(currentTask);
             jpbarProgress.update(jpbarProgress.getGraphics());
         });
+    }
+
+    @Override
+    public void onErrorOccurred(Exception ex, String message) {
+        JOptionPane.showMessageDialog(this, message, "Greška!", JOptionPane.ERROR_MESSAGE);
     }
     
 }

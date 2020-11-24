@@ -1,6 +1,7 @@
 package hr.danisoka.bulkmailer.app.views.windows.dialogs;
 
 import hr.danisoka.bulkmailer.app.models.Session;
+import hr.danisoka.bulkmailer.app.utils.AttemptUtils;
 import java.text.SimpleDateFormat;
 
 public class SessionInfoDialog extends javax.swing.JDialog {
@@ -242,6 +243,6 @@ public class SessionInfoDialog extends javax.swing.JDialog {
         lblTemplateFilePath.setText(session.getTemplateFilePath() == null ? "-" : session.getTemplateFilePath());
         lblHolderStartValue.setText(session.getHolderStart() == null ? "-" : session.getHolderStart());
         lblHolderEndValue.setText(session.getHolderEnd() == null ? "-" : session.getHolderEnd());
-        lblAttemptsCount.setText(session.getAttempts() == null ? "-" : String.valueOf(session.getAttempts().size()));
+        lblAttemptsCount.setText(String.valueOf(AttemptUtils.getAttemptCount(session)));
     }
 }

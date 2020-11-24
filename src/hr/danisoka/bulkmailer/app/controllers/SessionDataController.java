@@ -21,6 +21,7 @@ import hr.danisoka.bulkmailer.app.contracts.SessionWinContract;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.AttemptDaoImpl;
 import hr.danisoka.bulkmailer.app.db.DAOs.impl.HolderMappingDaoImpl;
 import hr.danisoka.bulkmailer.app.models.Attempt;
+import hr.danisoka.bulkmailer.app.utils.AttemptUtils;
 import java.sql.SQLException;
 
 public class SessionDataController implements SessionWinContract.Controller {
@@ -272,6 +273,7 @@ public class SessionDataController implements SessionWinContract.Controller {
                     f.delete();
                 }
             }
+            AttemptUtils.deleteAllAttempts(session);
         } catch (SQLException ex) {
             Logger.getLogger(SessionDataController.class.getName()).log(Level.SEVERE, null, ex);
             if(errorListener != null) {

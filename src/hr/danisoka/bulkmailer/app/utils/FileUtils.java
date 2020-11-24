@@ -1,6 +1,8 @@
 package hr.danisoka.bulkmailer.app.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.CopyOption;
@@ -25,6 +27,13 @@ public final class FileUtils {
     public static String getFileContent(File file) throws IOException {
         List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         return String.join("\n", lines);
+    }
+    
+    public static void writeStringToFile(File target, String content) throws IOException {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(target))) {
+            writer.write(content);
+            writer.close();
+        }
     }
     
     public static File storeFile(File file, File dir, String newName) throws Exception, IOException {
@@ -68,5 +77,9 @@ public final class FileUtils {
         } else {
             file.delete();
         }
+    }
+    
+    public static String readFileContentAsString(File file) throws IOException {
+        return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
     }
 }

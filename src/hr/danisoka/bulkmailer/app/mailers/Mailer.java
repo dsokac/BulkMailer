@@ -1,7 +1,8 @@
 package hr.danisoka.bulkmailer.app.mailers;
 
 import hr.danisoka.bulkmailer.app.listeners.ProgressListener;
-import java.io.UnsupportedEncodingException;
+import hr.danisoka.bulkmailer.app.models.attempts.AttemptJson;
+import hr.danisoka.bulkmailer.app.models.attempts.AttemptRecipient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -34,6 +35,7 @@ public abstract class Mailer {
     protected List<Message> messages = new ArrayList<>();
     protected MailerListener listener = null;
     
+    protected AttemptJson attempt;
     protected ProgressListener progressListener;
     
     public Mailer(String username, String password) {        
@@ -43,6 +45,10 @@ public abstract class Mailer {
     public Mailer(String username, String password, MailerListener listener) {        
         this.listener = listener;
         initialize(username, password);
+    }
+    
+    public void setAttemptData(AttemptJson attempt) {
+        this.attempt = attempt;
     }
     
     public void setProgressListener(ProgressListener progressListener) {
@@ -114,6 +120,14 @@ public abstract class Mailer {
                 listener.onErrorOccured(ex, ex.getMessage());
             }
         } catch (MessagingException ex) {
+            attempt.getStatistics().incrementFailedItem();
+            for(int i = 0; i < recipients.length; i++) {
+                Address recipient = recipients[i];
+                if(!attempt.hasRecord(recipient.toString())){
+                    AttemptRecipient r = new AttemptRecipient(recipient.toString(), "Kreiranje neuspješno", ex.getMessage());
+                    attempt.addRecipient(r);
+                }
+            }
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             if(listener != null) {
                 listener.onErrorOccured(ex, ex.getMessage());
@@ -143,12 +157,20 @@ public abstract class Mailer {
         if(progressListener != null) {
             progressListener.setProgressAction("Slanje poruka", messages.size(), true);
         }
+        int count = 0;
         try {
             transport = this.session.getTransport("smtp");
-            transport.connect();
-            int count = 0;
+            transport.connect();         
             for(Message m : messages) {
                 sendMessage(transport, m);
+                attempt.getStatistics().incrementProcessedItem();
+                for(int i = 0; i < m.getAllRecipients().length; i++) {
+                    Address recipient = m.getAllRecipients()[i];
+                    if(!attempt.hasRecord(recipient.toString())){
+                        AttemptRecipient r = new AttemptRecipient(recipient.toString(), "Slanje uspješno", "Poruka poslana.");
+                        attempt.addRecipient(r);
+                    }
+                }
                 try {
                     Thread.sleep(getSleepValue() * 1000);
                 } catch (InterruptedException ex) {
@@ -160,11 +182,25 @@ public abstract class Mailer {
             }
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+            attempt.setStatus("Neuspješno");
+            attempt.setStatusMessage(ex.getMessage());
             if(listener != null) {
                 listener.onErrorOccured(ex, ex.getMessage());
             }
         } catch (MessagingException ex) {
             Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+            attempt.getStatistics().incrementFailedItem();
+            try {
+                for(int i = 0; i < messages.get(count-1).getAllRecipients().length; i++) {
+                    Address recipient = messages.get(count-1).getAllRecipients()[i];
+                    if(!attempt.hasRecord(recipient.toString())){
+                        AttemptRecipient r = new AttemptRecipient(recipient.toString(), "Slanje neuspješno", ex.getMessage());
+                        attempt.addRecipient(r);
+                    }
+                }
+            } catch (MessagingException ex1) {
+                Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             if(listener != null) {
                 listener.onErrorOccured(ex, ex.getMessage());
             }
