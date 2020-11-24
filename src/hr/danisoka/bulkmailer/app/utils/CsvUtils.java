@@ -2,9 +2,11 @@ package hr.danisoka.bulkmailer.app.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 public final class CsvUtils {
     
     public static List<String> getHeaderFromFile(File file, String delimiter) throws FileNotFoundException, IOException {        
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF8"));
         String line = br.readLine();
         String[] header = line.split(delimiter);
         br.close();
@@ -23,7 +25,7 @@ public final class CsvUtils {
     public static List<List<String>> getDataRowFromFile(File file, String delimiter, int row, int limit) throws FileNotFoundException, IOException {        
         List<List<String>> results = null;
         List<String> lines = null;
-        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF8"))) {
             lines = br.lines().skip(row + 1).limit(limit).collect(Collectors.toList());
         }   
         results = new ArrayList<>();
